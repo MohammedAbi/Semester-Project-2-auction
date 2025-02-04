@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,32 +21,34 @@ function Header() {
               Auction House
             </a>
           </div>
+
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex  items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-4">
             <a
               href="/create"
-              className="rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Create
             </a>
             <a
               href="/login"
-              className="rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Login
             </a>
             <a
               href="/register"
-              className="rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Register
             </a>
             <a
               href="/contact"
-              className="rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Contact
             </a>
+
             {/* Profile Icon for Desktop */}
             <div className="relative">
               <button
@@ -69,6 +71,7 @@ function Header() {
                   />
                 </svg>
               </button>
+
               {/* Profile Dropdown Menu */}
               {isProfileMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-10">
@@ -82,6 +85,8 @@ function Header() {
               )}
             </div>
           </nav>
+
+          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMobileMenu}
@@ -105,6 +110,7 @@ function Header() {
             </button>
           </div>
         </div>
+
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-800 text-white p-4 space-y-4">
@@ -132,6 +138,7 @@ function Header() {
             >
               Contact
             </a>
+
             {/* Profile Option for Mobile */}
             <a
               href="/profile"

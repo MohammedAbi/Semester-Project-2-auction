@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter>
       <div className="flex flex-col min-h-screen bg-gray-100 pt-16">
         <Header />
-        <main className="">
+        <main className="flex-grow container mx-auto p-4">
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
