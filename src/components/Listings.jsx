@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import BidModal from "./model/BidModal";
 
 function Listings({ listings }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+
+  const openModal = (listing) => {
+    setSelectedListing(listing);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedListing(null);
+  };
+  const handleBidSubmit = (bidAmount) => {
+    console.log(`Bid placed: $${bidAmount} on listing ${selectedListing.id}`);
+    closeModal();
+  };
+
   return (
     <section id="listings" className="mb-12">
       <h2 className="text-3xl font-bold mb-6">Featured Listings</h2>
@@ -55,13 +73,23 @@ function Listings({ listings }) {
               <p className="text-gray-600 mt-2">
                 Auction Ends: {new Date(listing.endsAt).toLocaleString()}
               </p>
-              <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
+              <button
+                onClick={() => openModal(listing)}
+                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+              >
                 Place Bid
               </button>
             </div>
           </div>
         ))}
       </div>
+      {modalOpen && (
+        <BidModal
+          listing={selectedListing}
+          onClose={closeModal}
+          onSubmit={handleBidSubmit}
+        />
+      )}
     </section>
   );
 }
