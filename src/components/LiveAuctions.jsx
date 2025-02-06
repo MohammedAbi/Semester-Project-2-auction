@@ -1,50 +1,45 @@
-import React, { useState } from "react";
-import ValidateBid from "./validation/ValidateBid";
+import React, { useEffect, useState } from "react";
+import BidModal from "./model/BidModal";
+import LoadingIndicator from "./LoadingIndicator";
 
 function LiveAuctions({ listings = [] }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState(null);
-  const [bidAmount, setBidAmount] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
 
   const openModal = (listing) => {
     setSelectedListing(listing);
-    setBidAmount("");
-    setError("");
     setModalOpen(true);
   };
+
   const closeModal = () => {
-    setSelectedListing(null);
     setModalOpen(false);
+    setSelectedListing(null);
+    setLoading(false);
   };
 
-  const handleBidChange = (e) => {
-    setBidAmount(e.target.value);
-    setError("");
-  };
-
-  const handleBidSubmit = (e) => {
-    if (!selectedListing) return;
-
-    const latestBid =
-      selectedListing.bids.length > 0
-        ? selectedListing.bids[selectedListing.bids.length - 1].amount
-        : 0;
-    const bid = parseFloat(bidAmount);
-    const validationError = ValidateBid(bid, latestBid);
-
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-    console.log(`Bid placed: $${bid} on listing ${selectedListing.id}`);
-    closeModal();
+  const handleBidSubmit = (bidAmount) => {
+    setTimeout(() => {
+      console.log(`Bid placed: $${bidAmount} on listing ${selectedListing.id}`);
+      closeModal();
+      setLoading(false);
+    }, 4000);
   };
 
   return (
-    <section className="mb-12">
+    <section id="live-auctions" className="mb-12">
       <h2 className="text-3xl font-bold mb-6">Live Auctions</h2>
-      {listings.length > 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <LoadingIndicator size="w-12 h-12" color="border-blue-600" />
+        </div>
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {listings.map((listing) => (
             <div
@@ -95,58 +90,15 @@ function LiveAuctions({ listings = [] }) {
             </div>
           ))}
         </div>
-      ) : (
-        <p className="text-gray-600">
-          No live auctions available at the moment.
-        </p>
       )}
 
-      {/* Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 className="text-xl font-bold mb-4">Place a Bid</h3>
-            <p className="text-gray-600">
-              Bidding on: {selectedListing?.title}
-            </p>
-            <p className="text-gray-800 font-bold">
-              Latest Bid: $
-              {selectedListing?.bids.length > 0
-                ? selectedListing.bids[selectedListing.bids.length - 1].amount
-                : 0}
-            </p>
-            <input
-              type="number"
-              value={bidAmount}
-              onChange={handleBidChange}
-              className="w-full px-3 py-2 border rounded-md mt-4"
-              placeholder="Enter bid amount"
-              min={
-                selectedListing?.bids?.length > 0
-                  ? selectedListing.bids[selectedListing.bids.length - 1]
-                      .amount + 1
-                  : 1
-              }
-            />
-
-            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
-            <div className="flex justify-end mt-4">
-              <button
-                className="mr-2 px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                onClick={handleBidSubmit}
-              >
-                Submit Bid
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Render the BidModal when modalOpen is true */}
+      {modalOpen && selectedListing && (
+        <BidModal
+          listing={selectedListing}
+          onClose={closeModal}
+          onSubmit={handleBidSubmit}
+        />
       )}
     </section>
   );

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ValidateBid from "../validation/ValidateBid";
+import LoadingIndicator from "../LoadingIndicator";
 
 function BidModal({ listing, onClose, onSubmit }) {
   const [bidAmount, setBidAmount] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const handleBidChange = (e) => {
     setBidAmount(e.target.value);
@@ -22,7 +25,15 @@ function BidModal({ listing, onClose, onSubmit }) {
       setError(validationError);
       return;
     }
-    onSubmit(bid);
+
+    setLoading(true);
+
+    setTimeout(() => {
+      onSubmit(bid);
+      console.log(`Bid placed: $${bid} on listing ${listing.id}`);
+      setLoading(false);
+      onClose();
+    }, 4000);
   };
 
   return (
@@ -59,8 +70,13 @@ function BidModal({ listing, onClose, onSubmit }) {
           <button
             onClick={handleSubmit}
             className="mr-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            disabled={loading}
           >
-            Submit Bid
+            {loading ? (
+              <LoadingIndicator size="w-4 h-4" color="border-white" />
+            ) : (
+              "Submit Bid"
+            )}
           </button>
         </div>
       </div>
