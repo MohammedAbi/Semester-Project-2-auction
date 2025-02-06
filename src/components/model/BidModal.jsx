@@ -42,6 +42,11 @@ function BidModal({ listing, onClose, onSubmit }) {
           onChange={handleBidChange}
           className="w-full px-3 py-2 border rounded-md mt-4"
           placeholder="Enter bid amount"
+          min={
+            listing.bids.length > 0
+              ? listing.bids[listing.bids.length - 1].amount + 1
+              : 1
+          }
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
         <div className="flex justify-end mt-4">

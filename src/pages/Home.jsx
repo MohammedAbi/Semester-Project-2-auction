@@ -3,9 +3,9 @@ import Header from "../components/Header";
 import Hero from "../components/Hero";
 import SearchBar from "../components/SearchBar";
 import Listings from "../components/Listings";
+import LiveAuctions from "../components/LiveAuctions";
 
-
-function Home({listingsData}) {
+function Home({ listingsData }) {
   return (
     <div className="bg-gray-100 pt-16">
       <Header />
@@ -13,6 +13,7 @@ function Home({listingsData}) {
       <main className="container mx-auto p-4">
         <SearchBar />
         <Listings listings={listingsData} />
+        <LiveAuctions listings={listingsData} />
       </main>
     </div>
   );
