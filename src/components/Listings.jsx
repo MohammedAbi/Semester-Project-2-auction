@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import BidModal from "./model/BidModal";
+import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "./LoadingIndicator";
 
 function Listings({ listings }) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedListing, setSelectedListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -13,101 +12,40 @@ function Listings({ listings }) {
     }, 3000);
   }, []);
 
-  const openModal = (listing) => {
-    setSelectedListing(listing);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setSelectedListing(null);
-    setLoading(false);
-  };
-  const handleBidSubmit = (bidAmount) => {
-    setTimeout(() => {
-      console.log(`Bid placed: $${bidAmount} on listing ${selectedListing.id}`);
-      closeModal();
-      setLoading(false);
-    }, 4000);
-  };
-
   return (
     <section id="listings" className="mb-12">
-      <h2 className="text-3xl font-bold mb-6">Featured Listings</h2>
+      <h2 className="text-3xl font-bold text-blue-700 mb-6">Featured Listings</h2>
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
-          <LoadingIndicator size="w-12 h-12" color="border-blue-600" />
+          <LoadingIndicator size="w-12 h-12" color="border-blue-700" />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {listings.map((listing) => (
-            <div
-              className="bg-white shadow-lg rounded-lg overflow-hidden"
-              key={listing.id}
-            >
+            <div key={listing.id} className="bg-white shadow-lg rounded-2xl overflow-hidden">
               <img
                 src={listing.media[0]?.url || ""}
                 alt={listing.media[0]?.alt || "Image"}
                 className="w-full h-48 object-cover"
               />
-              <div className="p-4">
-                <h3 className="text-xl font-bold">{listing.title}</h3>
-                <p className="text-gray-600">{listing.description}</p>
-                <div className="flex flex-wrap mt-2">
-                  {listing.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full mr-2 mb-2"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center mt-2">
-                  <img
-                    src={listing.seller.avatar?.url || ""}
-                    alt={listing.seller.name}
-                    className="w-8 h-8 rounded-full mr-2"
-                  />
-                  <p className="text-gray-800">Seller: {listing.seller.name}</p>
-                </div>
-                <div>
-                  <p className="text-gray-800 font-bold">
-                    Current Bids: {listing._count.bids}
-                  </p>
-                  {listing.bids.length > 0 ? (
-                    <p className="text-gray-600">
-                      Latest Bid: $
-                      {listing.bids[listing.bids.length - 1].amount} by{" "}
-                      {listing.bids[listing.bids.length - 1].bidder.name}
-                    </p>
-                  ) : (
-                    <p className="text-gray-600">No bids yet</p>
-                  )}
-                </div>
-                <p className="text-gray-600 mt-2">
-                  Updated: {new Date(listing.updated).toLocaleString()}
-                </p>
-                <p className="text-gray-600 mt-2">
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-800">{listing.title}</h3>
+                <p className="text-gray-600 mt-2">{listing.description}</p>
+                <p className="text-gray-700 font-medium mt-3">
                   Auction Ends: {new Date(listing.endsAt).toLocaleString()}
                 </p>
-                <button
-                  onClick={() => openModal(listing)}
-                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
-                >
-                  Place Bid
-                </button>
+                <div className="mt-5">
+                  <button
+                    onClick={() => navigate(`/listing/${listing.id}`)}
+                    className="w-full bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition"
+                  >
+                    View Listing
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      )}
-      {modalOpen && (
-        <BidModal
-          listing={selectedListing}
-          onClose={closeModal}
-          onSubmit={handleBidSubmit}
-        />
       )}
     </section>
   );

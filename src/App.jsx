@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import ListingView from "./components/ListingView";
 
 const listingsData = [
   {
@@ -214,11 +215,16 @@ function App() {
         <main className="flex-grow container mx-auto p-4">
           <Routes>
             <Route path="/" element={<Home listingsData={listingsData} />} />
+            <Route
+              path="/listing/:id"
+              element={<ListingView listings={listingsData} />}
+            />
           </Routes>
         </main>
       </div>
     </BrowserRouter>
   );
 }
+
 
 export default App;
