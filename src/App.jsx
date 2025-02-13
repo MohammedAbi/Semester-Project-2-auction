@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import ListingView from "./components/ListingView";
+import Footer from "./components/Footer";
 
 const listingsData = [
   {
@@ -221,6 +222,7 @@ function App() {
             />
           </Routes>
         </main>
+        <Footer />
       </div>
     </BrowserRouter>
   );
