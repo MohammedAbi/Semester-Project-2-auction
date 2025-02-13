@@ -6,6 +6,7 @@ import ListingView from "./components/ListingView";
 import Footer from "./components/Footer";
 import Create from "./components/Create";
 import Login from "./components/Login";
+import Register from "./components/Register";
 
 const listingsData = [
   {
@@ -228,6 +229,7 @@ function App() {
               element={<Create listings={listingsData} />}
             />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
         <Footer />
