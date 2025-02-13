@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Create from "./components/Create";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Contact from "./components/Contact";
 
 const listingsData = [
   {
@@ -230,6 +231,7 @@ function App() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
         <Footer />
