@@ -209,6 +209,7 @@ const user = {
   ],
 };
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -221,10 +222,8 @@ function App() {
               path="/listing/:id"
               element={<ListingView listings={listingsData} />}
             />
-            <Route
-              path="/create"
-              element={<Create listings={listingsData} />}
-            />
+            <Route path="/create" element={<Create />} />
+            <Route path="/edit/:id" element={<Create listings={listingsData} />} />
           </Routes>
         </main>
         <Footer />
@@ -233,5 +232,5 @@ function App() {
   );
 }
 
-
 export default App;
+

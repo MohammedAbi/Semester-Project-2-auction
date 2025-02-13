@@ -39,7 +39,7 @@ function ListingView({ listings }) {
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-xl rounded-2xl">
       <button
         onClick={() => navigate("/")}
-        className="mb-5 bg-gray-600 text-white px-5 py-2 rounded-lg hover:bg-gray-700 transition"
+        className="mb-5 bg-gray-600  text-white px-5 py-2 rounded-lg  hover:bg-gray-700 transition"
       >
         Back to Listings
       </button>
