@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import ListingView from "./components/ListingView";
 import Footer from "./components/Footer";
+import Create from "./components/Create";
 
 const listingsData = [
   {
@@ -219,6 +220,10 @@ function App() {
             <Route
               path="/listing/:id"
               element={<ListingView listings={listingsData} />}
+            />
+            <Route
+              path="/create"
+              element={<Create listings={listingsData} />}
             />
           </Routes>
         </main>

@@ -2,7 +2,7 @@ import React from "react";
 
 function SearchBar() {
   return (
-    <div className="mb-8 relative w-96 mx-auto">
+    <div className="mb-8 relative max-w-96 mx-auto">
       <label htmlFor="search-input" className="sr-only">
         Search listings
       </label>
