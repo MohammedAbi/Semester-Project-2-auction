@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import ListingView from "./components/ListingView";
 import Footer from "./components/Footer";
 import Create from "./components/Create";
+import Login from "./components/Login";
 
 const listingsData = [
   {
@@ -209,7 +210,6 @@ const user = {
   ],
 };
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -223,7 +223,11 @@ function App() {
               element={<ListingView listings={listingsData} />}
             />
             <Route path="/create" element={<Create />} />
-            <Route path="/edit/:id" element={<Create listings={listingsData} />} />
+            <Route
+              path="/edit/:id"
+              element={<Create listings={listingsData} />}
+            />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
         <Footer />
@@ -233,4 +237,3 @@ function App() {
 }
 
 export default App;
-
