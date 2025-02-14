@@ -52,6 +52,16 @@ function LiveAuctions({ listings = [] }) {
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">
+                <div className="flex flex-wrap gap-2 mt-4 mb-4">
+                  {listing.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-200 text-gray-800 font-semibold px-2 py-1 rounded-full text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
                 <h3 className="text-xl font-bold">{listing.title}</h3>
                 <p className="text-gray-600">{listing.description}</p>
                 <p className="text-gray-900 font-semibold mt-4">
@@ -68,6 +78,9 @@ function LiveAuctions({ listings = [] }) {
                 ) : (
                   <p className="text-gray-600 mt-2">No bids yet</p>
                 )}
+                <p className="text-gray-600 mt-2">
+                Updated At: {new Date(listing.updated).toLocaleString()}
+                </p>
                 <p className="text-gray-600 mt-2">
                   Auction Ends: {new Date(listing.endsAt).toLocaleString()}
                 </p>

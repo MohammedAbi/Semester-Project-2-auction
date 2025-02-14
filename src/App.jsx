@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -8,6 +8,8 @@ import Create from "./components/Create";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Contact from "./components/Contact";
+import Profile from "./components/Profile";
+import ProfilePageListings from "./components/ProfilePageListings";
 
 const listingsData = [
   {
@@ -149,7 +151,7 @@ const listingsData = [
   },
 ];
 
-const user = {
+const profileData = {
   name: "John Doe",
   email: "johndoe@example.com",
   bio: "A passionate collector of rare items.",
@@ -193,6 +195,21 @@ const user = {
       updated: "2025-01-05T00:00:00.000Z",
       endsAt: "2025-03-01T00:00:00.000Z",
     },
+    {
+      id: "listing3",
+      title: "Rare Painting",
+      description: "A rare 18th-century painting.",
+      media: [
+        {
+          url: "https://images.unsplash.com/photo-1581337204873-ef36aa186caa?q=80&w=2956&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          alt: "Rare Painting",
+        },
+      ],
+      tags: ["painting", "art", "vintage"],
+      created: "2025-01-05T00:00:00.000Z",
+      updated: "2025-01-05T00:00:00.000Z",
+      endsAt: "2025-03-01T00:00:00.000Z",
+    },
   ],
   wins: [
     {
@@ -209,10 +226,55 @@ const user = {
       updated: "2025-01-10T00:00:00.000Z",
       endsAt: "2025-01-10T00:00:00.000Z",
     },
+    {
+      id: "win2",
+      title: "Antique Vase",
+      description: "An antique vase from the Ming dynasty.",
+      media: [
+        {
+          url: "https://images.unsplash.com/photo-1581337204873-ef36aa186caa?q=80&w=2956&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+      ],
+      tags: ["vase", "antique", "collectible"],
+      created: "2025-01-10T00:00:00.000Z",
+      updated: "2025-01-10T00:00:00.000Z",
+      endsAt: "2025-01-10T00:00:00.000Z",
+    },
+    {
+      id: "win3",
+      title: "Antique Vase",
+      description: "An antique vase from the Ming dynasty.",
+      media: [
+        {
+          url: "https://images.unsplash.com/photo-1581337204873-ef36aa186caa?q=80&w=2956&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+      ],
+      tags: ["vase", "antique", "collectible"],
+      created: "2025-01-10T00:00:00.000Z",
+      updated: "2025-01-10T00:00:00.000Z",
+      endsAt: "2025-01-10T00:00:00.000Z",
+    },
+    {
+      id: "win4",
+      title: "Antique Vase",
+      description: "An antique vase from the Ming dynasty.",
+      media: [
+        {
+          url: "https://images.unsplash.com/photo-1581337204873-ef36aa186caa?q=80&w=2956&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+      ],
+      tags: ["vase", "antique", "collectible"],
+      created: "2025-01-10T00:00:00.000Z",
+      updated: "2025-01-10T00:00:00.000Z",
+      endsAt: "2025-01-10T00:00:00.000Z",
+    },
   ],
 };
 
 function App() {
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = "smooth";
+  }, []);
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen bg-gray-100 pt-16">
@@ -227,11 +289,15 @@ function App() {
             <Route path="/create" element={<Create />} />
             <Route
               path="/edit/:id"
-              element={<Create listings={listingsData} />}
+              element={<Create profileData={profileData} />}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/contact" element={<Contact />} />
+            <Route
+              path="/profile"
+              element={<ProfilePageListings profileData={profileData} />}
+            />
           </Routes>
         </main>
         <Footer />
