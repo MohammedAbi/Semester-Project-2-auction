@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,11 +11,10 @@ function Login() {
     event.preventDefault();
     setLoading(true);
 
-    // Simulate login request with a timeout
     setTimeout(() => {
       console.log("Logging in with email:", email);
       setLoading(false);
-      navigate("/"); 
+      navigate("/");
     }, 2000);
   };
 
@@ -71,6 +70,17 @@ function Login() {
           )}
         </button>
       </form>
+      <div className="text-center mt-4">
+        <p className="text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-700 font-normal hover:underline"
+          >
+            Register
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

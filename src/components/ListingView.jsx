@@ -39,7 +39,7 @@ function ListingView({ listings }) {
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-xl rounded-2xl">
       <button
         onClick={() => navigate("/")}
-        className="mb-5 bg-gray-600  text-white px-5 py-2 rounded-lg  hover:bg-gray-700 transition"
+        className="mb-5 bg-gray-600  text-white px-6 py-2 rounded-lg  hover:bg-gray-700 transition"
       >
         Back to Listings
       </button>
@@ -49,6 +49,16 @@ function ListingView({ listings }) {
         className="w-full h-64 object-cover rounded-lg"
       />
       <h2 className="text-3xl font-bold text-gray-900 mt-5">{listing.title}</h2>
+      <div className="flex flex-wrap gap-2 mt-4 mb-4">
+                  {listing.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-200 text-gray-800 font-semibold px-2 py-1 rounded-full text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
       <p className="text-gray-700 mt-3">{listing.description}</p>
       <p className="text-gray-900 font-semibold mt-4">
         Current Bids: {listing._count.bids}

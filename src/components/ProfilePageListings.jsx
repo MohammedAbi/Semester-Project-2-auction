@@ -12,7 +12,6 @@ function ProfilePageListings({ profileData }) {
     }, 3000);
   }, []);
 
-  // Destructure profileData with defaults if needed
   const {
     name,
     email,
@@ -26,7 +25,8 @@ function ProfilePageListings({ profileData }) {
   } = profileData;
 
   return (
-    <div className="max-w-3xl mx-auto bg-gray-100 shadow-lg rounded-lg">
+    <div className="flex-grow container mx-auto  bg-gray-100  rounded-lg">
+
       {/* Loading Indicator */}
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
@@ -34,7 +34,7 @@ function ProfilePageListings({ profileData }) {
         </div>
       ) : (
         <>
-          <div className="mb-8 bg-white pb-6 pt-0 rounded-lg">
+          <div className=" bg-white pb-4 pt-0 rounded-lg">
             {/* Banner */}
             <div
               className="w-full h-32 bg-blue-700 rounded-lg flex items-center justify-center"
@@ -63,7 +63,7 @@ function ProfilePageListings({ profileData }) {
               </div>
             </div>
             {/* Bio & Credits */}
-            <div className="mt-6 mb-6 bg-white p-6 ">
+            <div className=" mb-6 bg-white p-6 ">
               <h3 className="text-xl font-semibold">Bio</h3>
               <p className="text-gray-700 mt-2">{bio}</p>
               <p className="text-gray-600 font-semibold mt-4">
@@ -71,7 +71,7 @@ function ProfilePageListings({ profileData }) {
               </p>
               {/* Edit Profile Button */}
               <button
-                className="bg-blue-700 text-white p-6 px-6 rounded-lg hover:bg-blue-800 mt-6"
+                className="bg-blue-700 w-full sm:w-auto text-white p-6 rounded-lg hover:bg-blue-800 mt-6"
                 onClick={() =>
                   navigate("/register", { state: { profileData } })
                 }
@@ -84,7 +84,7 @@ function ProfilePageListings({ profileData }) {
           <div className="mt-6 mb-6 ">
             {/* Listings */}
             <div className="mt-6 mb-6 p-6">
-              <h3 className="text-3xl font-bold">My Listings</h3>
+              <h3 className="text-3xl font-bold mb-6">My Listings</h3>
               {listings.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
                   {listings.map((listing) => (
@@ -120,7 +120,7 @@ function ProfilePageListings({ profileData }) {
                         <p className="text-gray-700 font-medium mt-3">
                           Updated: {new Date(listing.updated).toLocaleString()}
                         </p>
-                        <p className="text-gray-700 font-medium mt-3">
+                        <p className="text-gray-800 font-bold text-sm mt-3">
                           Auction Ends:{" "}
                           {new Date(listing.endsAt).toLocaleString()}
                         </p>
@@ -143,7 +143,7 @@ function ProfilePageListings({ profileData }) {
 
             {/* Wins */}
             <div className="mt-6 mb-6 p-6">
-              <h3 className="text-3xl font-bold">My Wins</h3>
+              <h3 className="text-3xl font-bold mb-6">My Wins</h3>
               {wins.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
                   {wins.map((win) => (

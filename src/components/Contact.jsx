@@ -35,7 +35,6 @@ function Contact() {
       return;
     }
 
-    // Simulate a successful form submission
     setTimeout(() => {
       setSuccess("Thank you for contacting us! We will get back to you soon.");
       setLoading(false);
@@ -43,7 +42,6 @@ function Contact() {
       setEmail("");
       setMessage("");
 
-      // Redirect to home page after submission
       setTimeout(() => {
         navigate("/");
       }, 1500);

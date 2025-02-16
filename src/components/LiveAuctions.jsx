@@ -34,7 +34,7 @@ function LiveAuctions({ listings = [] }) {
 
   return (
     <section id="live-auctions" className="mb-12">
-      <h2 className="text-3xl font-bold text-blue-700 mb-6">Live Auctions</h2>
+      <h2 className="text-3xl font-bold mb-6">Live Auctions</h2>
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
           <LoadingIndicator size="w-12 h-12" color="border-blue-700" />
@@ -52,6 +52,7 @@ function LiveAuctions({ listings = [] }) {
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">
+                <h3 className="text-xl font-bold">{listing.title}</h3>
                 <div className="flex flex-wrap gap-2 mt-4 mb-4">
                   {listing.tags.map((tag, index) => (
                     <span
@@ -62,8 +63,22 @@ function LiveAuctions({ listings = [] }) {
                     </span>
                   ))}
                 </div>
-                <h3 className="text-xl font-bold">{listing.title}</h3>
                 <p className="text-gray-600">{listing.description}</p>
+
+                <div className="flex items-center justify-start space-x-4 mt-2 bg-white">
+                  <img
+                    src={
+                      listing.seller?.avatar?.url ||
+                      "https://via.placeholder.com/150"
+                    }
+                    alt={listing.seller?.avatar?.alt || "User Avatar"}
+                    className="w-10 h-10 rounded-full border"
+                  />
+                  <p className="text-sm font-normal text-gray-800">
+                    Seller: {listing.seller?.name}
+                  </p>
+                </div>
+
                 <p className="text-gray-900 font-semibold mt-4">
                   Current Bids: {listing._count.bids}
                 </p>
@@ -79,9 +94,9 @@ function LiveAuctions({ listings = [] }) {
                   <p className="text-gray-600 mt-2">No bids yet</p>
                 )}
                 <p className="text-gray-600 mt-2">
-                Updated At: {new Date(listing.updated).toLocaleString()}
+                  Updated: {new Date(listing.updated).toLocaleString()}
                 </p>
-                <p className="text-gray-600 mt-2">
+                <p className="text-gray-600 mt-2 font-bold text-sm">
                   Auction Ends: {new Date(listing.endsAt).toLocaleString()}
                 </p>
                 <button

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -8,7 +8,6 @@ import Create from "./components/Create";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Contact from "./components/Contact";
-import Profile from "./components/Profile";
 import ProfilePageListings from "./components/ProfilePageListings";
 
 const listingsData = [
