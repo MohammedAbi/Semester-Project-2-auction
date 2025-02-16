@@ -1,5 +1,10 @@
 # Semester Project 2: Auction Website
 
+## Product Showcase
+![Image](https://github.com/user-attachments/assets/ac151289-57e3-4644-b4ee-0c998afe3e39)
+This image provides a glimpse of the auction website's user interface, showcasing how users can interact with the platform, browse listings, and place bids. The design follows modern web standards with a clean, user-friendly layout using TailwindCSS, offering a seamless experience for both mobile and desktop users.
+
+
 ## Description
 
 This project is a front-end application for an auction website where users can list and bid on items. It interfaces with an existing API to manage auction data, such as creating listings, placing bids, and managing user profiles.
