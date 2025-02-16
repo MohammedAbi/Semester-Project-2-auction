@@ -78,8 +78,11 @@ function Register({ profileData }) {
         {editing ? "Edit Profile" : "Register"}
       </h2>
       <form onSubmit={handleSubmit}>
-        <label className="block mb-2">Name*</label>
+        <label className="block mb-2" htmlFor="name">
+          Name*
+        </label>
         <input
+          id="name"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={name}
@@ -87,8 +90,11 @@ function Register({ profileData }) {
           required
         />
 
-        <label className="block mb-2">Email*</label>
+        <label className="block mb-2" htmlFor="email">
+          Email*
+        </label>
         <input
+          id="email"
           type="email"
           className="w-full p-2 border rounded mb-4"
           value={email}
@@ -99,16 +105,22 @@ function Register({ profileData }) {
 
         {!editing && (
           <>
-            <label className="block mb-2">Password*</label>
+            <label className="block mb-2" htmlFor="password">
+              Password*
+            </label>
             <input
+              id="password"
               type="password"
               className="w-full p-2 border rounded mb-4"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <label className="block mb-2">Confirm Password*</label>
+            <label className="block mb-2" htmlFor="confirmPassword">
+              Confirm Password*
+            </label>
             <input
+              id="confirmPassword"
               type="password"
               className="w-full p-2 border rounded mb-4"
               value={confirmPassword}
@@ -118,47 +130,65 @@ function Register({ profileData }) {
           </>
         )}
 
-        <label className="block mb-2">Bio (optional)</label>
+        <label className="block mb-2" htmlFor="bio">
+          Bio (optional)
+        </label>
         <textarea
+          id="bio"
           className="w-full p-2 border rounded mb-4"
           value={bio}
           onChange={(e) => setBio(e.target.value)}
         />
 
-        <label className="block mb-2">Avatar URL (optional)</label>
+        <label className="block mb-2" htmlFor="avatarUrl">
+          Avatar URL (optional)
+        </label>
         <input
+          id="avatarUrl"
           type="url"
           className="w-full p-2 border rounded mb-4"
           value={avatarUrl}
           onChange={(e) => setAvatarUrl(e.target.value)}
         />
 
-        <label className="block mb-2">Avatar Alt Text (optional)</label>
+        <label className="block mb-2" htmlFor="avatarAlt">
+          Avatar Alt Text (optional)
+        </label>
         <input
+          id="avatarAlt"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={avatarAlt}
           onChange={(e) => setAvatarAlt(e.target.value)}
         />
 
-        <label className="block mb-2">Banner URL (optional)</label>
+        <label className="block mb-2" htmlFor="bannerUrl">
+          Banner URL (optional)
+        </label>
         <input
+          id="bannerUrl"
           type="url"
           className="w-full p-2 border rounded mb-4"
           value={bannerUrl}
           onChange={(e) => setBannerUrl(e.target.value)}
         />
 
-        <label className="block mb-2">Banner Alt Text (optional)</label>
+        <label className="block mb-2" htmlFor="bannerAlt">
+          Banner Alt Text (optional)
+        </label>
         <input
+          id="bannerAlt"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={bannerAlt}
           onChange={(e) => setBannerAlt(e.target.value)}
         />
 
-        <label className="block mb-2">Venue Manager (optional)</label>
+        <label className="block mb-2" htmlFor="venueManager">
+          Venue Manager (optional)
+        </label>
         <input
+          id="venueManager"
           type="checkbox"
           className="mb-4"
           checked={venueManager}
@@ -197,6 +227,7 @@ function Register({ profileData }) {
           )}
         </button>
       </form>
+
       {!editing && (
         <div className="text-center mt-4">
           <p className="text-gray-600">

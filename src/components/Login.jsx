@@ -22,8 +22,11 @@ function Login() {
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
       <form onSubmit={handleSubmit}>
-        <label className="block mb-2">Email*</label>
+        <label className="block mb-2" htmlFor="email">
+          Email*
+        </label>
         <input
+          id="email"
           type="email"
           className="w-full p-2 border rounded mb-4"
           value={email}
@@ -31,9 +34,12 @@ function Login() {
           required
         />
 
-        <label className="block mb-2">Password*</label>
+        <label className="block mb-2" htmlFor="password">
+          Password*
+        </label>
         <input
           type="password"
+          id="password"
           className="w-full p-2 border rounded mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

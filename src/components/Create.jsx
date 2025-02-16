@@ -81,48 +81,58 @@ function Create({ profileData, listings = [] }) {
         {existingListing ? "Edit Listing" : "Create New Listing"}
       </h2>
       <form onSubmit={handleSubmit}>
-        <label className="block mb-2">Title*</label>
+        <label className="block mb-2" htmlFor="title">
+          Title*
+        </label>
         <input
           type="text"
+          id="title"
           className="w-full p-2 border rounded mb-4"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
 
-        <label className="block mb-2">Description</label>
+        <label className="block mb-2" htmlFor="description">
+          Description
+        </label>
         <textarea
+          id="description"
           className="w-full p-2 border rounded mb-4"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <label className="block mb-2">Tags (comma-separated)</label>
+        <label className="block mb-2" htmlFor="tag">Tags (comma-separated)</label>
         <input
+        id="tag"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
         />
 
-        <label className="block mb-2">Media URL</label>
+        <label className="block mb-2" htmlFor="mediaUrl">Media URL</label>
         <input
+        id="mediaUrl"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={mediaUrl}
           onChange={(e) => setMediaUrl(e.target.value)}
         />
 
-        <label className="block mb-2">Media Alt Text</label>
+        <label className="block mb-2" htmlFor="mediaAlt">Media Alt Text</label>
         <input
+        id="mediaAlt"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={mediaAlt}
           onChange={(e) => setMediaAlt(e.target.value)}
         />
 
-        <label className="block mb-2">Ends At*</label>
+        <label className="block mb-2" htmlFor="ends">Ends At*</label>
         <input
+        id="ends"
           type="datetime-local"
           className="w-full p-2 border rounded mb-4"
           value={endsAt}

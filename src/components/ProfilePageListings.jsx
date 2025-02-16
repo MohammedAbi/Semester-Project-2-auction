@@ -71,7 +71,7 @@ function ProfilePageListings({ profileData }) {
               </p>
               {/* Edit Profile Button */}
               <button
-                className="bg-blue-700 w-full sm:w-auto text-white p-6 rounded-lg hover:bg-blue-800 mt-6"
+                className="bg-blue-700 w-full sm:w-auto text-white  p-6 rounded-lg hover:bg-blue-800 mt-6"
                 onClick={() =>
                   navigate("/register", { state: { profileData } })
                 }
@@ -127,7 +127,7 @@ function ProfilePageListings({ profileData }) {
                         <div className="mt-5">
                           <button
                             onClick={() => navigate(`/edit/${listing.id}`)}
-                            className="w-full bg-gray-400 text-white px-5 py-3 rounded-lg hover:bg-gray-500 transition"
+                            className="w-full bg-gray-600 text-white font-semibold px-5 py-3 rounded-lg hover:bg-gray-500 transition"
                           >
                             Edit Listing
                           </button>
