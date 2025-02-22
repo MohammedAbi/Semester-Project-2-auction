@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_AUTH, API_PROFILES } from "../../api/routes.mjs";
 import { fetchData } from "../../utils/fetchUtils.mjs";
+import { registerUser, updateProfile } from "../../api/auth.mjs";
 
 function Register({ profileData }) {
   const navigate = useNavigate();
@@ -36,44 +37,20 @@ function Register({ profileData }) {
     }
   }, [editing, location.state]);
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   if (!editing && password !== confirmPassword) {
-  //     alert("Passwords do not match!");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   const userData = {
-  //     name,
-  //     email,
-  //     password: editing ? undefined : password,
-  //     bio,
-  //     avatar: {
-  //       url: avatarUrl,
-  //       alt: avatarAlt,
-  //     },
-  //     banner: {
-  //       url: bannerUrl,
-  //       alt: bannerAlt,
-  //     },
-  //     venueManager,
-  //   };
-
-  //   setTimeout(() => {
-  //     console.log(
-  //       editing ? "Updating profile:" : "Registering user:",
-  //       userData
-  //     );
-  //     setLoading(false);
-  //     if (editing) {
-  //       navigate("/profile");
-  //     } else navigate("/login");
-  //   }, 2000);
-  // };
-
+  // {
+  //   "name": "student2702",
+  //   "email": "student27002@stud.noroff.no",
+  //   "password": "student27002", 
+  //   "bio": "This is my profile bio", 
+  //   "avatar": {
+  //     "url": "https://unsplash.com/photos/a-man-with-long-hair-and-a-beard-wearing-a-horned-hat-HIfw5PRU5fI" 
+  //   },
+  //   "banner": {
+  //     "url": "https://unsplash.com/photos/a-man-with-long-hair-and-a-beard-wearing-a-horned-hat-HIfw5PRU5fI", 
+  //     "alt": "My banner alt text" 
+  //   },
+  //   "venueManager": true 
+  // }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -102,13 +79,10 @@ function Register({ profileData }) {
     };
 
     try {
-      const endpoint = editing
-        ? API_PROFILES.UPDATE(name) // If editing profile
-        : API_AUTH.REGISTER; // If registering new user
-
-      const method = editing ? "PUT" : "POST"; // PUT for editing, POST for registering
-
-      const response = await fetchData(endpoint, method, "api-key", userData);
+      // Use the API service functions
+      const response = editing
+        ? await updateProfile(name, userData) // Update profile
+        : await registerUser(userData); // Register new user
 
       // Handle response - after success, navigate to login or profile
       console.log("User data:", response); // Log the response for debugging

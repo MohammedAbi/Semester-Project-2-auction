@@ -26,8 +26,11 @@ export const fetchData = async (url, method = "GET", headerType = null, body = n
 
     // Handle non-2xx responses
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      const errorData = await response.json();
+      console.error("Full API Error:", errorData);
+      throw new Error(`HTTP error! Status: ${response.status} - ${errorData.message}`);
     }
+    
 
     const data = await response.json(); // Parse JSON response
     console.log(data)

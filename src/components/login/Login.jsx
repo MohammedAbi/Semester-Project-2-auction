@@ -1,21 +1,44 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { fetchData } from "../../utils/fetchUtils.mjs";
+import { API_AUTH } from "../../api/routes.mjs";
+import { setLocaStorage } from "../../utils/localStorageUtils.mjs";
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    setTimeout(() => {
-      console.log("Logging in with email:", email);
+    try {
+      const body = { email, password };
+      const response = await fetchData(API_AUTH.LOGIN, "POST", null, body);
+
+      console.log("API Response:", response);
+
+      if (response.errors) {
+        throw new Error(response.errors[0]?.message || "Login failed");
+      }
+
+      if (response.data?.accessToken) {
+        setLocaStorage("token", response.data.accessToken);
+        setLocaStorage("user", JSON.stringify(response.data));
+        navigate("/");
+      } else {
+        throw new Error("Invalid login credentials.");
+      }
+    } catch (error) {
+      setError(error.message);
+      console.error("Login error:", error);
+    } finally {
       setLoading(false);
-      navigate("/");
-    }, 2000);
+    }
   };
 
   return (

@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import ListingView from "./components/ListingView";
 import Footer from "./components/Footer";
 import Create from "./components/Create";
-import Login from "./components/Login";
+import Login from "./components/login/Login";
 import Contact from "./components/Contact";
 import ProfilePageListings from "./components/ProfilePageListings";
 import { fetchData } from "./utils/fetchUtils.mjs";
