@@ -1,4 +1,4 @@
-import { useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -6,149 +6,151 @@ import ListingView from "./components/ListingView";
 import Footer from "./components/Footer";
 import Create from "./components/Create";
 import Login from "./components/Login";
-import Register from "./components/Register";
 import Contact from "./components/Contact";
 import ProfilePageListings from "./components/ProfilePageListings";
+import { fetchData } from "./utils/fetchUtils.mjs";
+import { API_LISTINGS, API_PROFILES } from "./api/routes.mjs";
+import Register from "./components/register/Register";
 
-const listingsData = [
-  {
-    id: "1",
-    title: "Vintage Art Piece",
-    description: "A rare collectible from the 1920s.",
-    tags: ["art", "vintage"],
-    media: [
-      {
-        url: "https://media.istockphoto.com/id/931025190/photo/justice-gavel-on-laptop-computer-keyboard.jpg?s=2048x2048&w=is&k=20&c=nWCVLxGPYbPKxJGpe_5nFMKFpb1w29nDv6pd56pveB8=",
-        alt: "Vintage Art Piece",
-      },
-    ],
-    created: "2023-10-01T00:00:00.000Z",
-    updated: "2023-10-05T00:00:00.000Z",
-    endsAt: "2023-12-31T23:59:59.000Z",
-    seller: {
-      name: "John Doe",
-      email: "john.doe@example.com",
-      bio: "Art collector and enthusiast.",
-      avatar: {
-        url: "https://randomuser.me/api/portraits/men/1.jpg",
-        alt: "John Doe",
-      },
-      banner: {
-        url: "https://example.com/banner.jpg",
-        alt: "John Doe's Banner",
-      },
-      wins: [],
-    },
-    bids: [
-      {
-        id: "1",
-        amount: 150,
-        bidder: {
-          name: "Jane Smith",
-          email: "jane.smith@example.com",
-          bio: "Antique lover.",
-          avatar: {
-            url: "https://randomuser.me/api/portraits/women/2.jpg",
-            alt: "Jane Smith",
-          },
-          banner: {
-            url: "https://example.com/banner.jpg",
-            alt: "Jane Smith's Banner",
-          },
-        },
-        created: "2023-10-10T12:34:56.000Z",
-      },
-    ],
-    _count: {
-      bids: 1,
-    },
-  },
-  {
-    id: "2",
-    title: "Antique Clock",
-    description: "A beautiful antique clock from the 1800s.",
-    tags: ["antique", "clock"],
-    media: [
-      {
-        url: "https://media.istockphoto.com/id/931025190/photo/justice-gavel-on-laptop-computer-keyboard.jpg?s=2048x2048&w=is&k=20&c=nWCVLxGPYbPKxJGpe_5nFMKFpb1w29nDv6pd56pveB8=",
-        alt: "Antique Clock",
-      },
-    ],
-    created: "2023-10-02T00:00:00.000Z",
-    updated: "2023-10-06T00:00:00.000Z",
-    endsAt: "2023-12-25T23:59:59.000Z",
-    seller: {
-      name: "Alice Johnson",
-      email: "alice.johnson@example.com",
-      bio: "Antique dealer.",
-      avatar: {
-        url: "https://randomuser.me/api/portraits/women/3.jpg",
-        alt: "Alice Johnson",
-      },
-      banner: {
-        url: "https://example.com/banner.jpg",
-        alt: "Alice Johnson's Banner",
-      },
-      wins: [],
-    },
-    bids: [],
-    _count: {
-      bids: 0,
-    },
-  },
-  {
-    id: "3",
-    title: "Rare Coin Collection",
-    description: "A collection of rare coins from around the world.",
-    tags: ["coins", "collectible"],
-    media: [
-      {
-        url: "https://media.istockphoto.com/id/931025190/photo/justice-gavel-on-laptop-computer-keyboard.jpg?s=2048x2048&w=is&k=20&c=nWCVLxGPYbPKxJGpe_5nFMKFpb1w29nDv6pd56pveB8=",
-        alt: "Rare Coin Collection",
-      },
-    ],
-    created: "2023-10-03T00:00:00.000Z",
-    updated: "2023-10-07T00:00:00.000Z",
-    endsAt: "2023-12-20T23:59:59.000Z",
-    seller: {
-      name: "Bob Brown",
-      email: "bob.brown@example.com",
-      bio: "Coin collector.",
-      avatar: {
-        url: "https://randomuser.me/api/portraits/men/4.jpg",
-        alt: "Bob Brown",
-      },
-      banner: {
-        url: "https://example.com/banner.jpg",
-        alt: "Bob Brown's Banner",
-      },
-      wins: [],
-    },
-    bids: [
-      {
-        id: "2",
-        amount: 200,
-        bidder: {
-          name: "Charlie Davis",
-          email: "charlie.davis@example.com",
-          bio: "Numismatist.",
-          avatar: {
-            url: "https://randomuser.me/api/portraits/men/5.jpg",
-            alt: "Charlie Davis",
-          },
-          banner: {
-            url: "https://example.com/banner.jpg",
-            alt: "Charlie Davis's Banner",
-          },
-        },
-        created: "2023-10-11T14:22:33.000Z",
-      },
-    ],
-    _count: {
-      bids: 1,
-    },
-  },
-];
+// const listingsData = [
+//   {
+//     id: "1",
+//     title: "Vintage Art Piece",
+//     description: "A rare collectible from the 1920s.",
+//     tags: ["art", "vintage"],
+//     media: [
+//       {
+//         url: "https://media.istockphoto.com/id/931025190/photo/justice-gavel-on-laptop-computer-keyboard.jpg?s=2048x2048&w=is&k=20&c=nWCVLxGPYbPKxJGpe_5nFMKFpb1w29nDv6pd56pveB8=",
+//         alt: "Vintage Art Piece",
+//       },
+//     ],
+//     created: "2023-10-01T00:00:00.000Z",
+//     updated: "2023-10-05T00:00:00.000Z",
+//     endsAt: "2023-12-31T23:59:59.000Z",
+//     seller: {
+//       name: "John Doe",
+//       email: "john.doe@example.com",
+//       bio: "Art collector and enthusiast.",
+//       avatar: {
+//         url: "https://randomuser.me/api/portraits/men/1.jpg",
+//         alt: "John Doe",
+//       },
+//       banner: {
+//         url: "https://example.com/banner.jpg",
+//         alt: "John Doe's Banner",
+//       },
+//       wins: [],
+//     },
+//     bids: [
+//       {
+//         id: "1",
+//         amount: 150,
+//         bidder: {
+//           name: "Jane Smith",
+//           email: "jane.smith@example.com",
+//           bio: "Antique lover.",
+//           avatar: {
+//             url: "https://randomuser.me/api/portraits/women/2.jpg",
+//             alt: "Jane Smith",
+//           },
+//           banner: {
+//             url: "https://example.com/banner.jpg",
+//             alt: "Jane Smith's Banner",
+//           },
+//         },
+//         created: "2023-10-10T12:34:56.000Z",
+//       },
+//     ],
+//     _count: {
+//       bids: 1,
+//     },
+//   },
+//   {
+//     id: "2",
+//     title: "Antique Clock",
+//     description: "A beautiful antique clock from the 1800s.",
+//     tags: ["antique", "clock"],
+//     media: [
+//       {
+//         url: "https://media.istockphoto.com/id/931025190/photo/justice-gavel-on-laptop-computer-keyboard.jpg?s=2048x2048&w=is&k=20&c=nWCVLxGPYbPKxJGpe_5nFMKFpb1w29nDv6pd56pveB8=",
+//         alt: "Antique Clock",
+//       },
+//     ],
+//     created: "2023-10-02T00:00:00.000Z",
+//     updated: "2023-10-06T00:00:00.000Z",
+//     endsAt: "2023-12-25T23:59:59.000Z",
+//     seller: {
+//       name: "Alice Johnson",
+//       email: "alice.johnson@example.com",
+//       bio: "Antique dealer.",
+//       avatar: {
+//         url: "https://randomuser.me/api/portraits/women/3.jpg",
+//         alt: "Alice Johnson",
+//       },
+//       banner: {
+//         url: "https://example.com/banner.jpg",
+//         alt: "Alice Johnson's Banner",
+//       },
+//       wins: [],
+//     },
+//     bids: [],
+//     _count: {
+//       bids: 0,
+//     },
+//   },
+//   {
+//     id: "3",
+//     title: "Rare Coin Collection",
+//     description: "A collection of rare coins from around the world.",
+//     tags: ["coins", "collectible"],
+//     media: [
+//       {
+//         url: "https://media.istockphoto.com/id/931025190/photo/justice-gavel-on-laptop-computer-keyboard.jpg?s=2048x2048&w=is&k=20&c=nWCVLxGPYbPKxJGpe_5nFMKFpb1w29nDv6pd56pveB8=",
+//         alt: "Rare Coin Collection",
+//       },
+//     ],
+//     created: "2023-10-03T00:00:00.000Z",
+//     updated: "2023-10-07T00:00:00.000Z",
+//     endsAt: "2023-12-20T23:59:59.000Z",
+//     seller: {
+//       name: "Bob Brown",
+//       email: "bob.brown@example.com",
+//       bio: "Coin collector.",
+//       avatar: {
+//         url: "https://randomuser.me/api/portraits/men/4.jpg",
+//         alt: "Bob Brown",
+//       },
+//       banner: {
+//         url: "https://example.com/banner.jpg",
+//         alt: "Bob Brown's Banner",
+//       },
+//       wins: [],
+//     },
+//     bids: [
+//       {
+//         id: "2",
+//         amount: 200,
+//         bidder: {
+//           name: "Charlie Davis",
+//           email: "charlie.davis@example.com",
+//           bio: "Numismatist.",
+//           avatar: {
+//             url: "https://randomuser.me/api/portraits/men/5.jpg",
+//             alt: "Charlie Davis",
+//           },
+//           banner: {
+//             url: "https://example.com/banner.jpg",
+//             alt: "Charlie Davis's Banner",
+//           },
+//         },
+//         created: "2023-10-11T14:22:33.000Z",
+//       },
+//     ],
+//     _count: {
+//       bids: 1,
+//     },
+//   },
+// ];
 
 const profileData = {
   name: "John Doe",
@@ -271,31 +273,56 @@ const profileData = {
 };
 
 function App() {
+  const [listings, setListings] = useState([]);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch listings data
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const data = await fetchData(API_LISTINGS.BASE(true, true), "GET"); 
+        setListings(data.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
+
+  // Smooth scrolling
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
   }, []);
+
+
+
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen bg-gray-100 pt-16">
         <Header />
         <main className="flex-grow container mx-auto p-4">
           <Routes>
-            <Route path="/" element={<Home listingsData={listingsData} />} />
+            <Route path="/" element={<Home listingsData={listings} />} />
             <Route
               path="/listing/:id"
-              element={<ListingView listings={listingsData} />}
+              element={<ListingView listings={listings} />}
             />
             <Route path="/create" element={<Create />} />
             <Route
               path="/edit/:id"
-              element={<Create profileData={profileData} />}
+              element={<Create profileData={profile} />}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/contact" element={<Contact />} />
             <Route
               path="/profile"
-              element={<ProfilePageListings profileData={profileData} />}
+              element={<ProfilePageListings profileData={profile} />}
             />
           </Routes>
         </main>

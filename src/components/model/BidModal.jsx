@@ -15,7 +15,7 @@ function BidModal({ listing, onClose, onSubmit }) {
 
   const handleSubmit = () => {
     const latestBid =
-      listing.bids.length > 0
+      listing?.bids?.length > 0
         ? listing.bids[listing.bids.length - 1].amount
         : 0;
     const bid = parseFloat(bidAmount);
@@ -43,7 +43,7 @@ function BidModal({ listing, onClose, onSubmit }) {
         <p className="text-gray-600">Bidding on: {listing.title}</p>
         <p className="text-gray-800 font-bold">
           Latest bid: $
-          {listing.bids.length > 0
+          {listing?.bids?.length > 0
             ? listing.bids[listing.bids.length - 1].amount
             : 0}
         </p>
@@ -54,7 +54,7 @@ function BidModal({ listing, onClose, onSubmit }) {
           className="w-full px-3 py-2 border rounded-md mt-4"
           placeholder="Enter bid amount"
           min={
-            listing.bids.length > 0
+            listing?.bids?.length > 0
               ? listing.bids[listing.bids.length - 1].amount + 1
               : 1
           }

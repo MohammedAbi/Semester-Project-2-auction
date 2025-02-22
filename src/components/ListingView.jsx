@@ -63,7 +63,7 @@ function ListingView({ listings }) {
       <p className="text-gray-900 font-semibold mt-4">
         Current Bids: {listing._count.bids}
       </p>
-      {listing.bids.length > 0 ? (
+      {listing?.bids?.length > 0 ? (
         <p className="text-gray-700 mt-2">
           Latest Bid:{" "}
           <span className="font-semibold">

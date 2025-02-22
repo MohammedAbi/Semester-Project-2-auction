@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { API_AUTH, API_PROFILES } from "../../api/routes.mjs";
+import { fetchData } from "../../utils/fetchUtils.mjs";
 
 function Register({ profileData }) {
   const navigate = useNavigate();
@@ -34,9 +36,48 @@ function Register({ profileData }) {
     }
   }, [editing, location.state]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
 
+  //   if (!editing && password !== confirmPassword) {
+  //     alert("Passwords do not match!");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   const userData = {
+  //     name,
+  //     email,
+  //     password: editing ? undefined : password,
+  //     bio,
+  //     avatar: {
+  //       url: avatarUrl,
+  //       alt: avatarAlt,
+  //     },
+  //     banner: {
+  //       url: bannerUrl,
+  //       alt: bannerAlt,
+  //     },
+  //     venueManager,
+  //   };
+
+  //   setTimeout(() => {
+  //     console.log(
+  //       editing ? "Updating profile:" : "Registering user:",
+  //       userData
+  //     );
+  //     setLoading(false);
+  //     if (editing) {
+  //       navigate("/profile");
+  //     } else navigate("/login");
+  //   }, 2000);
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Ensure passwords match
     if (!editing && password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -60,16 +101,27 @@ function Register({ profileData }) {
       venueManager,
     };
 
-    setTimeout(() => {
-      console.log(
-        editing ? "Updating profile:" : "Registering user:",
-        userData
-      );
-      setLoading(false);
+    try {
+      const endpoint = editing
+        ? API_PROFILES.UPDATE(name) // If editing profile
+        : API_AUTH.REGISTER; // If registering new user
+
+      const method = editing ? "PUT" : "POST"; // PUT for editing, POST for registering
+
+      const response = await fetchData(endpoint, method, "api-key", userData);
+
+      // Handle response - after success, navigate to login or profile
+      console.log("User data:", response); // Log the response for debugging
       if (editing) {
         navigate("/profile");
-      } else navigate("/login");
-    }, 2000);
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
