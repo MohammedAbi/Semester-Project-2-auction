@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { fetchData } from "../utils/fetchUtils.mjs";
+import { API_LISTINGS } from "../api/routes.mjs";
 
 function Create({ profileData, listings = [] }) {
   const navigate = useNavigate();
@@ -46,33 +48,32 @@ function Create({ profileData, listings = [] }) {
     }
   }, [existingListing]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
 
-    const updatedListing = {
-      id: existingListing ? existingListing.id : Date.now().toString(),
+    const requestBody = {
       title,
       description,
       tags: tags.split(",").map((tag) => tag.trim()),
-      media: [{ url: mediaUrl, alt: mediaAlt }],
-      endsAt,
-      updated: new Date().toISOString(),
+      media: mediaUrl ? [{ url: mediaUrl, alt: mediaAlt }] : [],
+      endsAt: new Date(endsAt).toISOString(),
     };
 
-    // Simulate API call delay
-    setTimeout(() => {
-      if (existingListing) {
-        console.log("Updating Listing:", updatedListing);
-      } else {
-        console.log("Creating New Listing:", updatedListing);
-      }
-      if (sourceListings.length === 0) {
-        navigate("/");
-      } else {
-        navigate("/profile");
-      }
-    }, 4000);
+    try {
+      const data = await fetchData(
+        API_LISTINGS.CREATE,
+        "POST",
+        "auth",
+        requestBody
+      );
+      console.log("Listing created:", data);
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to create listing:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -103,36 +104,44 @@ function Create({ profileData, listings = [] }) {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <label className="block mb-2" htmlFor="tag">Tags (comma-separated)</label>
+        <label className="block mb-2" htmlFor="tag">
+          Tags (comma-separated)
+        </label>
         <input
-        id="tag"
+          id="tag"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
         />
 
-        <label className="block mb-2" htmlFor="mediaUrl">Media URL</label>
+        <label className="block mb-2" htmlFor="mediaUrl">
+          Media URL
+        </label>
         <input
-        id="mediaUrl"
+          id="mediaUrl"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={mediaUrl}
           onChange={(e) => setMediaUrl(e.target.value)}
         />
 
-        <label className="block mb-2" htmlFor="mediaAlt">Media Alt Text</label>
+        <label className="block mb-2" htmlFor="mediaAlt">
+          Media Alt Text
+        </label>
         <input
-        id="mediaAlt"
+          id="mediaAlt"
           type="text"
           className="w-full p-2 border rounded mb-4"
           value={mediaAlt}
           onChange={(e) => setMediaAlt(e.target.value)}
         />
 
-        <label className="block mb-2" htmlFor="ends">Ends At*</label>
+        <label className="block mb-2" htmlFor="ends">
+          Ends At*
+        </label>
         <input
-        id="ends"
+          id="ends"
           type="datetime-local"
           className="w-full p-2 border rounded mb-4"
           value={endsAt}

@@ -11,6 +11,7 @@ import { getHeaders } from "./headerUtils.mjs";
 export const fetchData = async (url, method = "GET", headerType = null, body = null) => {
   try {
     const headers = getHeaders(headerType); // Get appropriate headers
+      console.log("Request Headers:", headers); // Debugging line
 
     const options = {
       method,
