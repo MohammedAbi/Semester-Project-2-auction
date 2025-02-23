@@ -18,7 +18,7 @@ function Login() {
 
     try {
       const body = { email, password };
-      const response = await fetchData(API_AUTH.LOGIN, "POST", null, body);
+      const response = await fetchData(API_AUTH.LOGIN, "POST", [null, null], body);
 
       console.log("API Response:", response);
 

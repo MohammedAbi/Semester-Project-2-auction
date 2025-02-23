@@ -5,48 +5,52 @@ import { API_LISTINGS } from "../api/routes.mjs";
 
 function Create({ profileData, listings = [] }) {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // Extract ID for editing mode
+  const isEditing = Boolean(id);
 
-  // Determine which source of listings to use.
-  // If profileData is provided, use its listings; otherwise, fall back to the passed listings.
+  // Determine source of listings
   const sourceListings = profileData ? profileData.listings : listings;
   const existingListing = sourceListings.find((listing) => listing.id === id);
 
-  // Initialize state – if editing (existingListing exists), form will be populated.
-  // Otherwise, it will be blank (for creation).
-  const [title, setTitle] = useState(existingListing?.title || "");
-  const [description, setDescription] = useState(
-    existingListing?.description || ""
-  );
-  const [tags, setTags] = useState(existingListing?.tags.join(", ") || "");
-  const [mediaUrl, setMediaUrl] = useState(
-    existingListing?.media[0]?.url || ""
-  );
-  const [mediaAlt, setMediaAlt] = useState(
-    existingListing?.media[0]?.alt || ""
-  );
-  const [endsAt, setEndsAt] = useState(
-    existingListing?.endsAt
-      ? new Date(existingListing.endsAt).toISOString().slice(0, 16)
-      : ""
-  );
+  // State
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaAlt, setMediaAlt] = useState("");
+  const [endsAt, setEndsAt] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Fetch listing if editing but not found in local data
   useEffect(() => {
-    // Only update form if editing an existing listing
-    if (existingListing) {
+    if (isEditing && !existingListing) {
+      const fetchListing = async () => {
+        try {
+          const listingData = await fetchData(
+            `${API_LISTINGS.GET}/${id}`,
+            "GET",
+            ["auth", "api-key"]
+          );
+          setTitle(listingData.title);
+          setDescription(listingData.description);
+          setTags(listingData.tags.join(", "));
+          setMediaUrl(listingData.media[0]?.url || "");
+          setMediaAlt(listingData.media[0]?.alt || "");
+          setEndsAt(new Date(listingData.endsAt).toISOString().slice(0, 16));
+        } catch (error) {
+          console.error("Error fetching listing:", error);
+        }
+      };
+      fetchListing();
+    } else if (existingListing) {
       setTitle(existingListing.title);
       setDescription(existingListing.description);
       setTags(existingListing.tags.join(", "));
       setMediaUrl(existingListing.media[0]?.url || "");
       setMediaAlt(existingListing.media[0]?.alt || "");
-      setEndsAt(
-        existingListing.endsAt
-          ? new Date(existingListing.endsAt).toISOString().slice(0, 16)
-          : ""
-      );
+      setEndsAt(new Date(existingListing.endsAt).toISOString().slice(0, 16));
     }
-  }, [existingListing]);
+  }, [id, existingListing, isEditing]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,16 +65,21 @@ function Create({ profileData, listings = [] }) {
     };
 
     try {
-      const data = await fetchData(
-        API_LISTINGS.CREATE,
-        "POST",
-        "auth",
+      const endpoint = isEditing
+        ? `${API_LISTINGS.UPDATE}/${id}`
+        : API_LISTINGS.CREATE;
+      const method = isEditing ? "PUT" : "POST";
+
+      const response = await fetchData(
+        endpoint,
+        method,
+        ["auth", "api-key"],
         requestBody
       );
-      console.log("Listing created:", data);
+      console.log("Listing saved:", response);
       navigate("/");
     } catch (error) {
-      console.error("Failed to create listing:", error);
+      console.error("Failed to save listing:", error);
     } finally {
       setLoading(false);
     }
@@ -79,7 +88,7 @@ function Create({ profileData, listings = [] }) {
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-4">
-        {existingListing ? "Edit Listing" : "Create New Listing"}
+        {isEditing ? "Edit Listing" : "Create New Listing"}
       </h2>
       <form onSubmit={handleSubmit}>
         <label className="block mb-2" htmlFor="title">
@@ -174,7 +183,7 @@ function Create({ profileData, listings = [] }) {
               </svg>
               Processing...
             </span>
-          ) : existingListing ? (
+          ) : isEditing ? (
             "Update Listing"
           ) : (
             "Create Listing"
