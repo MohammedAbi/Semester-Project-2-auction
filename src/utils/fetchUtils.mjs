@@ -16,7 +16,6 @@ export const fetchData = async (
 ) => {
   try {
     const headers = getHeaders(headerTypes); // Get appropriate headers
-    console.log("Request Headers:", headers); // Debugging line
 
     const options = {
       method,
@@ -40,7 +39,6 @@ export const fetchData = async (
     }
 
     const data = await response.json(); // Parse JSON response
-    console.log("Response Data:", data);
     return data;
   } catch (error) {
     console.error("Fetch error:", error);
