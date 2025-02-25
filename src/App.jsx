@@ -13,50 +13,75 @@ import { API_LISTINGS } from "./api/routes.mjs";
 import Profile from "./components/Profile";
 
 function App() {
+  // Listings (Buy Now)
   const [listings, setListings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1); // Track current page
-  const [hasMore, setHasMore] = useState(true); // To track if there are more pages
+  const [listingsPage, setListingsPage] = useState(1);
+  const [hasMoreListings, setHasMoreListings] = useState(true);
+  const [loadingListings, setLoadingListings] = useState(false);
 
-  // Fetch listings data
+  // Auctions
+  const [auctions, setAuctions] = useState([]);
+  const [auctionsPage, setAuctionsPage] = useState(1);
+  const [hasMoreAuctions, setHasMoreAuctions] = useState(true);
+  const [loadingAuctions, setLoadingAuctions] = useState(false);
+
+  // Fetch Listings (Buy Now)
   useEffect(() => {
     const fetchListings = async () => {
+      setLoadingListings(true);
       try {
         const data = await fetchData(
-          API_LISTINGS.BASE(true, true) + `&page=${page}`,
+          API_LISTINGS.BASE(true, true) +
+            `&_active=true&limit=9&page=${listingsPage}`,
           "GET"
         );
 
-        // Prevent duplicate listings
-        setListings((prevListings) => {
-          const newListings = data.data.filter(
-            (newListing) =>
-              !prevListings.some(
-                (prevListing) => prevListing.id === newListing.id
-              )
+        setListings((prev) => {
+          const newItems = data.data.filter(
+            (item) => !prev.some((prevItem) => prevItem.id === item.id)
           );
-          return [...prevListings, ...newListings];
+          return [...prev, ...newItems];
         });
 
-        // Check if there are more pages
-        setHasMore(data.data.length > 0);
+        setHasMoreListings(data.data.length === 9);
       } catch (error) {
-        setError(error.message);
+        console.error("Error fetching listings:", error);
       } finally {
-        setLoading(false);
+        setLoadingListings(false);
       }
     };
 
     fetchListings();
-  }, [page]); // Run every time the page changes
+  }, [listingsPage]);
 
-  // Load more listings when user scrolls to the bottom (optional)
-  const handleLoadMore = () => {
-    if (hasMore && !loading) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // Fetch Live Auctions
+  useEffect(() => {
+    const fetchAuctions = async () => {
+      setLoadingAuctions(true);
+      try {
+        const data = await fetchData(
+          API_LISTINGS.BASE(true, true) +
+            `&_active=true&limit=9&page=${auctionsPage}`,
+          "GET"
+        );
+
+        setAuctions((prev) => {
+          const newItems = data.data.filter(
+            (item) => !prev.some((prevItem) => prevItem.id === item.id)
+          );
+          return [...prev, ...newItems];
+        });
+
+        setHasMoreAuctions(data.data.length === 9);
+      } catch (error) {
+        console.error("Error fetching auctions:", error);
+      } finally {
+        setLoadingAuctions(false);
+      }
+    };
+
+    fetchAuctions();
+  }, [auctionsPage]);
 
   return (
     <BrowserRouter>
@@ -64,7 +89,24 @@ function App() {
         <Header />
         <main className="flex-grow container mx-auto p-4">
           <Routes>
-            <Route path="/" element={<Home listingsData={listings} />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  listingsData={listings}
+                  auctionsData={auctions}
+                  loadMoreListings={() => setListingsPage((prev) => prev + 1)}
+                  loadMoreAuctions={() => setAuctionsPage((prev) => prev + 1)}
+                  hasMoreListings={hasMoreListings}
+                  hasMoreAuctions={hasMoreAuctions}
+                  loadingListings={loadingListings}
+                  state
+                  for
+                  listings
+                  loadingAuctions={loadingAuctions}
+                />
+              }
+            />
             <Route
               path="/listing/:id"
               element={<ListingView listings={listings} />}
@@ -76,14 +118,6 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
-          {hasMore && (
-            <button
-              onClick={handleLoadMore}
-              className="mt-4 p-2 bg-blue-500 text-white rounded"
-            >
-              Load More
-            </button>
-          )}
         </main>
         <Footer />
       </div>
