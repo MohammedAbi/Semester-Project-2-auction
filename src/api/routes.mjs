@@ -20,14 +20,3 @@ export const API_LISTINGS = {
   BID: (id) => `${API_BASE_URL}/auction/listings/${id}/bids`,
   SEARCH: (query) => `${API_BASE_URL}/auction/listings/search?q=${query}`,
 };
-
-// Profiles Endpoints
-export const API_PROFILES = {
-  BASE: `${API_BASE_URL}/auction/profiles`,
-  SINGLE: (name) => `${API_BASE_URL}/auction/profiles/${name}`,
-  UPDATE: (name) => `${API_BASE_URL}/auction/profiles/${name}`,
-  LISTINGS: (name) => `${API_BASE_URL}/auction/profiles/${name}/listings`,
-  BIDS: (name) => `${API_BASE_URL}/auction/profiles/${name}/bids`,
-  WINS: (name) => `${API_BASE_URL}/auction/profiles/${name}/wins`,
-  SEARCH: (query) => `${API_BASE_URL}/auction/profiles/search?q=${query}`,
-};

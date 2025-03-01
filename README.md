@@ -1,9 +1,9 @@
 # Semester Project 2: Auction Website
 
 ## Product Showcase
+
 ![Image](https://github.com/user-attachments/assets/ac151289-57e3-4644-b4ee-0c998afe3e39)
 This image provides a glimpse of the auction website's user interface, showcasing how users can interact with the platform, browse listings, and place bids. The design follows modern web standards with a clean, user-friendly layout using TailwindCSS, offering a seamless experience for both mobile and desktop users.
-
 
 ## Description
 
@@ -15,6 +15,7 @@ This project is a front-end application for an auction website where users can l
 - **Item Listings**: Users can create listings with titles, descriptions, media, and deadlines.
 - **Bidding**: Registered users can place bids on items listed by others.
 - **User Profile**: Registered users can update their avatar and view their total credits.
+- **Search Bar**: Users can search for listings efficiently.
 
 ## Technologies Used
 
@@ -70,6 +71,41 @@ The project follows a component-based architecture in React. The folder structur
    ```bash
    npm run preview
    ```
+
+## API Endpoints
+
+Base URL
+
+```bash
+export const API_BASE_URL = "https://v2.api.noroff.dev"
+```
+
+Authentication Endpoints
+
+```bash
+export const API_AUTH = {
+  BASE: `${API_BASE_URL}/auth`,
+  LOGIN: `${API_BASE_URL}/auth/login`,
+  REGISTER: `${API_BASE_URL}/auth/register`,
+}
+```
+
+Listings Endpoints
+
+```bash
+export const API_LISTINGS = {
+  BASE: (includeSeller = false, includeBids = false) =>
+    `${API_BASE_URL}/auction/listings?_seller=${includeSeller}&_bids=${includeBids}`,
+  SINGLE: (id) => `${API_BASE_URL}/auction/listings/${id}`,
+  FILTER: (tag, active) =>
+    `${API_BASE_URL}/auction/listings?_tag=${tag}&_active=${active}`,
+  CREATE: `${API_BASE_URL}/auction/listings`,
+  UPDATE: (id) => `${API_BASE_URL}/auction/listings/${id}`,
+  DELETE: (id) => `${API_BASE_URL}/auction/listings/${id}`,
+  BID: (id) => `${API_BASE_URL}/auction/listings/${id}/bids`,
+  SEARCH: (query) => `${API_BASE_URL}/auction/listings/search?q=${query}`,
+}
+```
 
 ## Links
 
