@@ -1,39 +1,62 @@
-import React, { useEffect, useState } from "react";
-import ValidateBid from "../validation/ValidateBid";
-import LoadingIndicator from "../LoadingIndicator";
+import React, { useState } from "react";
+import ValidateBid from "../validation/ValidateBid"; // Your validation logic
+import LoadingIndicator from "../LoadingIndicator"; // Loading spinner component
+import { getUser } from "../../utils/localStorageUtils.mjs";
 
-function BidModal({ listing, onClose, onSubmit }) {
-  const [bidAmount, setBidAmount] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+function BidModal({ listing, onClose, onSubmit, updateListing }) {
+  const [bidAmount, setBidAmount] = useState(""); // State to store bid input
+  const [error, setError] = useState(""); // State to store error message
+  const [loading, setLoading] = useState(false); // State to manage loading state
 
-
+  // Handle input change for the bid amount
   const handleBidChange = (e) => {
     setBidAmount(e.target.value);
-    setError("");
+    setError(""); // Clear error when user changes input
   };
 
-  const handleSubmit = () => {
+  // Handle form submission for placing a bid
+  const handleSubmit = async () => {
+    // Get the latest bid if there are any
     const latestBid =
       listing?.bids?.length > 0
         ? listing.bids[listing.bids.length - 1].amount
         : 0;
-    const bid = parseFloat(bidAmount);
 
+    const bid = parseFloat(bidAmount); // Parse the entered bid amount
+
+    // Validate the bid amount
     const validationError = ValidateBid(bid, latestBid);
     if (validationError) {
       setError(validationError);
-      return;
+      return; // Exit if validation fails
     }
 
-    setLoading(true);
+    setLoading(true); // Start loading state
 
-    setTimeout(() => {
-      onSubmit(bid);
+    try {
+      // Call onSubmit which will handle the API request for placing the bid
+      const user = getUser(); // Get the user object from localStorage
+      const userName = user?.name || "YOU"; // Use the name from localStorage or fallback to "YOU"
+      console.log("User name:", userName);
+
+      await onSubmit(bid);
       console.log(`Bid placed: $${bid} on listing ${listing.id}`);
-      setLoading(false);
-      onClose();
-    }, 4000);
+
+      // Update the listing locally (add the new bid)
+      const updatedListing = {
+        ...listing,
+        bids: [...listing.bids, { amount: bid, bidder: { name: userName } }],
+      };
+
+      // Call the parent function to update the listing in the global state
+      updateListing(listing.id, updatedListing);
+      onClose(); // Close the modal after successful bid placement
+    } catch (error) {
+      setError("Failed to place bid. Try again.");
+      console.error("Error placing bid:", error);
+    } finally {
+      setLoading(false); // Stop loading state
+    }
   };
 
   return (

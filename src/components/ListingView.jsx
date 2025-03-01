@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BidModal from "./model/BidModal";
+import { fetchData } from "../utils/fetchUtils.mjs";
+import { API_LISTINGS } from "../api/routes.mjs";
+import { getUser } from "../utils/localStorageUtils.mjs";
 
-function ListingView({ listings }) {
+function ListingView({ listings, updateListing }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,18 +31,43 @@ function ListingView({ listings }) {
     setSelectedListing(null);
   };
 
-  const handleBidSubmit = (bidAmount) => {
-    setTimeout(() => {
-      console.log(`Bid placed: $${bidAmount} on listing ${listing.id}`);
-      closeModal();
-    }, 4000);
+  // In ListingView and LiveAuctions
+  const handleBidSubmit = async (bidAmount) => {
+    try {
+      const user = getUser(); // Get the user object from localStorage
+      const userName = user?.name;
+      console.log("User name:", userName);
+
+      const response = await fetchData(
+        API_LISTINGS.BID(selectedListing.id),
+        "POST",
+        ["api-key", "auth"],
+        { amount: bidAmount }
+      );
+
+      if (response.success) {
+        const newBid = { amount: bidAmount, bidder: { name: userName } };
+        const updatedListing = {
+          ...selectedListing,
+          bids: [...selectedListing.bids, newBid], // Add the new bid to the bids array
+        };
+
+        updateListing(selectedListing.id, updatedListing); // Ensure this updates state in parent
+        setSelectedListing(updatedListing); // Update local state immediately
+        closeModal();
+      } else {
+        console.log("Bid placement failed", response);
+      }
+    } catch (error) {
+      console.error("Error placing bid:", error);
+    }
   };
 
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white shadow-xl rounded-2xl">
       <button
         onClick={() => navigate("/")}
-        className="mb-5 bg-gray-600  text-white px-6 py-2 rounded-lg  hover:bg-gray-700 transition"
+        className="mb-5 bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"
       >
         Back to Listings
       </button>
@@ -50,15 +78,15 @@ function ListingView({ listings }) {
       />
       <h2 className="text-3xl font-bold text-gray-900 mt-5">{listing.title}</h2>
       <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                  {listing.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="bg-gray-200 text-gray-800 font-semibold px-2 py-1 rounded-full text-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+        {listing.tags.map((tag, index) => (
+          <span
+            key={index}
+            className="bg-gray-200 text-gray-800 font-semibold px-2 py-1 rounded-full text-sm"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
       <p className="text-gray-700 mt-3">{listing.description}</p>
       <p className="text-gray-900 font-semibold mt-4">
         Current Bids: {listing._count.bids}
@@ -81,7 +109,7 @@ function ListingView({ listings }) {
       {/* Place Bid Button */}
       <button
         onClick={openModal}
-        className=" mt-6 w-full bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition"
+        className="mt-6 w-full bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition"
       >
         Place Bid
       </button>
@@ -90,6 +118,7 @@ function ListingView({ listings }) {
       {modalOpen && (
         <BidModal
           listing={selectedListing}
+          updateListing={updateListing}
           onClose={closeModal}
           onSubmit={handleBidSubmit}
         />

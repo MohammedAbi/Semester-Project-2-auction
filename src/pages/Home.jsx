@@ -14,6 +14,7 @@ function Home({
   hasMoreAuctions,
   loadingListings,
   loadingAuctions,
+  updateListing,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -41,7 +42,7 @@ function Home({
         )}
 
         {/* Live Auctions Section */}
-        <LiveAuctions listings={auctionsData} />
+        <LiveAuctions listings={auctionsData} updateListing={updateListing} />
 
         {/* Show "Load More Auctions" button  */}
         {hasMoreAuctions && !loadingAuctions && auctionsData.length > 0 && (

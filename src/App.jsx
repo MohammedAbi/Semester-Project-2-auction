@@ -25,6 +25,14 @@ function App() {
   const [hasMoreAuctions, setHasMoreAuctions] = useState(true);
   const [loadingAuctions, setLoadingAuctions] = useState(false);
 
+  const updateListing = (id, updatedListing) => {
+    setListings((prevListings) =>
+      prevListings.map((listing) =>
+        listing.id === id ? updatedListing : listing
+      )
+    );
+  };
+
   // Fetch Listings (Buy Now)
   useEffect(() => {
     const fetchListings = async () => {
@@ -95,6 +103,7 @@ function App() {
                 <Home
                   listingsData={listings}
                   auctionsData={auctions}
+                  updateListing={updateListing}
                   loadMoreListings={() => setListingsPage((prev) => prev + 1)}
                   loadMoreAuctions={() => setAuctionsPage((prev) => prev + 1)}
                   hasMoreListings={hasMoreListings}
@@ -109,8 +118,14 @@ function App() {
             />
             <Route
               path="/listing/:id"
-              element={<ListingView listings={listings} />}
+              element={
+                <ListingView
+                  listings={listings}
+                  updateListing={updateListing}
+                />
+              }
             />
+
             <Route path="/create" element={<Create />} />
             <Route path="/edit/:id" element={<Create />} />
             <Route path="/login" element={<Login />} />
