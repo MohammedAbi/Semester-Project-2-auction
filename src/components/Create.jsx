@@ -26,21 +26,30 @@ function Create({ profileData, listings = [] }) {
     if (isEditing && !existingListing) {
       const fetchListing = async () => {
         try {
-          const listingData = await fetchData(
-            `${API_LISTINGS.GET}/${id}`,
-            "GET",
-            ["auth", "api-key"]
+          const response = await fetch(API_LISTINGS.SINGLE(id));
+
+          // Check if the response is ok (status 200)
+          if (!response.ok) {
+            const textResponse = await response.text(); // Read as text
+            console.error("Error response:", textResponse); // Log error response
+            throw new Error(`Failed to fetch listing: ${response.status}`);
+          }
+
+          // If the response is OK, parse it as JSON
+          const listingData = await response.json();
+          setTitle(listingData.data.title);
+          setDescription(listingData.data.description);
+          setTags(listingData.data.tags.join(", "));
+          setMediaUrl(listingData.data.media[0]?.url || "");
+          setMediaAlt(listingData.data.media[0]?.alt || "");
+          setEndsAt(
+            new Date(listingData.data.endsAt).toISOString().slice(0, 16)
           );
-          setTitle(listingData.title);
-          setDescription(listingData.description);
-          setTags(listingData.tags.join(", "));
-          setMediaUrl(listingData.media[0]?.url || "");
-          setMediaAlt(listingData.media[0]?.alt || "");
-          setEndsAt(new Date(listingData.endsAt).toISOString().slice(0, 16));
         } catch (error) {
           console.error("Error fetching listing:", error);
         }
       };
+
       fetchListing();
     } else if (existingListing) {
       setTitle(existingListing.title);
@@ -52,6 +61,38 @@ function Create({ profileData, listings = [] }) {
     }
   }, [id, existingListing, isEditing]);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   const requestBody = {
+  //     title,
+  //     description,
+  //     tags: tags.split(",").map((tag) => tag.trim()),
+  //     media: mediaUrl ? [{ url: mediaUrl, alt: mediaAlt }] : [],
+  //     endsAt: new Date(endsAt).toISOString(),
+  //   };
+
+  //   try {
+  //     const endpoint = isEditing
+  //       ? `${API_LISTINGS.UPDATE}/${id}`
+  //       : API_LISTINGS.CREATE;
+  //     const method = isEditing ? "PUT" : "POST";
+
+  //     const response = await fetchData(
+  //       endpoint,
+  //       method,
+  //       ["auth", "api-key"],
+  //       requestBody
+  //     );
+  //     console.log("Listing saved:", response);
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error("Failed to save listing:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -66,10 +107,11 @@ function Create({ profileData, listings = [] }) {
 
     try {
       const endpoint = isEditing
-        ? `${API_LISTINGS.UPDATE}/${id}`
+        ? API_LISTINGS.UPDATE(id)
         : API_LISTINGS.CREATE;
       const method = isEditing ? "PUT" : "POST";
 
+      // Assuming fetchData handles sending the request
       const response = await fetchData(
         endpoint,
         method,
@@ -77,7 +119,7 @@ function Create({ profileData, listings = [] }) {
         requestBody
       );
       console.log("Listing saved:", response);
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       console.error("Failed to save listing:", error);
     } finally {
@@ -101,6 +143,7 @@ function Create({ profileData, listings = [] }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          placeholder="Enter the title of the listing"
         />
 
         <label className="block mb-2" htmlFor="description">
@@ -111,6 +154,7 @@ function Create({ profileData, listings = [] }) {
           className="w-full p-2 border rounded mb-4"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          placeholder="Provide a description of the listing"
         />
 
         <label className="block mb-2" htmlFor="tag">
@@ -122,6 +166,7 @@ function Create({ profileData, listings = [] }) {
           className="w-full p-2 border rounded mb-4"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
+          placeholder="Enter tags, separated by commas"
         />
 
         <label className="block mb-2" htmlFor="mediaUrl">
@@ -133,6 +178,7 @@ function Create({ profileData, listings = [] }) {
           className="w-full p-2 border rounded mb-4"
           value={mediaUrl}
           onChange={(e) => setMediaUrl(e.target.value)}
+          placeholder="Enter the media URL (optional)"
         />
 
         <label className="block mb-2" htmlFor="mediaAlt">
@@ -144,6 +190,7 @@ function Create({ profileData, listings = [] }) {
           className="w-full p-2 border rounded mb-4"
           value={mediaAlt}
           onChange={(e) => setMediaAlt(e.target.value)}
+          placeholder="Describe the media (optional)"
         />
 
         <label className="block mb-2" htmlFor="ends">
@@ -156,6 +203,7 @@ function Create({ profileData, listings = [] }) {
           value={endsAt}
           onChange={(e) => setEndsAt(e.target.value)}
           required
+          placeholder="Select the end date and time"
         />
 
         <button

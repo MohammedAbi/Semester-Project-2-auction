@@ -9,7 +9,7 @@ export const API_AUTH = {
 
 // Listings Endpoints
 export const API_LISTINGS = {
-  BASE: (includeSeller = false, includeBids = false) =>
+  BASE: (includeSeller = true, includeBids = true) =>
     `${API_BASE_URL}/auction/listings?_seller=${includeSeller}&_bids=${includeBids}`,
   SINGLE: (id) => `${API_BASE_URL}/auction/listings/${id}`,
   FILTER: (tag, active) =>
@@ -19,4 +19,15 @@ export const API_LISTINGS = {
   DELETE: (id) => `${API_BASE_URL}/auction/listings/${id}`,
   BID: (id) => `${API_BASE_URL}/auction/listings/${id}/bids`,
   SEARCH: (query) => `${API_BASE_URL}/auction/listings/search?q=${query}`,
+};
+
+// Profiles Endpoints
+export const API_PROFILES = {
+  BASE: `${API_BASE_URL}/auction/profiles`,
+  SINGLE: (name) => `${API_BASE_URL}/auction/profiles/${name}`,
+  UPDATE: (name) => `${API_BASE_URL}/auction/profiles/${name}`,
+  LISTINGS: (name) => `${API_BASE_URL}/auction/profiles/${name}/listings`,
+  BIDS: (name) => `${API_BASE_URL}/auction/profiles/${name}/bids`,
+  WINS: (name) => `${API_BASE_URL}/auction/profiles/${name}/wins`,
+  SEARCH: (query) => `${API_BASE_URL}/auction/profiles/search?q=${query}`,
 };

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 function Contact() {
   const navigate = useNavigate();
-  const [name, setName] = useState("test_user");
-  const [email, setEmail] = useState("test@stud.noroff.no");
-  const [message, setMessage] = useState("This is a test message.");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -71,6 +71,7 @@ function Contact() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          placeholder="Enter your name"
         />
 
         <label className="block mb-2" htmlFor="email">
@@ -83,6 +84,7 @@ function Contact() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          placeholder="Enter your email"
         />
 
         <label className="block mb-2" htmlFor="message">
@@ -95,6 +97,7 @@ function Contact() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required
+          placeholder="Enter your message"
         />
 
         <button

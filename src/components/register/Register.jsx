@@ -37,20 +37,6 @@ function Register({ profileData }) {
     }
   }, [editing, location.state]);
 
-  // {
-  //   "name": "student2702",
-  //   "email": "student27002@stud.noroff.no",
-  //   "password": "student27002", 
-  //   "bio": "This is my profile bio", 
-  //   "avatar": {
-  //     "url": "https://unsplash.com/photos/a-man-with-long-hair-and-a-beard-wearing-a-horned-hat-HIfw5PRU5fI" 
-  //   },
-  //   "banner": {
-  //     "url": "https://unsplash.com/photos/a-man-with-long-hair-and-a-beard-wearing-a-horned-hat-HIfw5PRU5fI", 
-  //     "alt": "My banner alt text" 
-  //   },
-  //   "venueManager": true 
-  // }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,18 +65,23 @@ function Register({ profileData }) {
     };
 
     try {
-      // Use the API service functions
-      const response = editing
-        ? await updateProfile(name, userData) // Update profile
-        : await registerUser(userData); // Register new user
+      let response;
+      if (editing) {
+        // ✅ Include API key in header for profile update
+        response = await fetchData(
+          `${API_PROFILES.UPDATE(name)}`,
+          "PUT",
+          ["api-key", "auth"],
+          userData
+        );
+      } else {
+        // ✅ Include API key in header for user registration
+        response = await fetchData(API_AUTH, "POST", ["api-key"], userData);
+      }
 
       // Handle response - after success, navigate to login or profile
-      console.log("User data:", response); // Log the response for debugging
-      if (editing) {
-        navigate("/profile");
-      } else {
-        navigate("/login");
-      }
+      console.log("User data:", response); // Debugging
+      navigate(editing ? "/profile" : "/login");
     } catch (error) {
       console.error("Error during registration:", error);
     } finally {
@@ -114,6 +105,7 @@ function Register({ profileData }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+             placeholder="Enter your name"
         />
 
         <label className="block mb-2" htmlFor="email">
@@ -126,6 +118,7 @@ function Register({ profileData }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          placeholder="Enter your email address"
           disabled={editing} // Prevent email change when editing
         />
 
@@ -141,6 +134,7 @@ function Register({ profileData }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder="Enter your password"
             />
             <label className="block mb-2" htmlFor="confirmPassword">
               Confirm Password*
@@ -152,6 +146,7 @@ function Register({ profileData }) {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+               placeholder="Confirm your password"
             />
           </>
         )}
@@ -164,6 +159,7 @@ function Register({ profileData }) {
           className="w-full p-2 border rounded mb-4"
           value={bio}
           onChange={(e) => setBio(e.target.value)}
+          placeholder="Tell us about yourself (optional)"
         />
 
         <label className="block mb-2" htmlFor="avatarUrl">
@@ -175,6 +171,7 @@ function Register({ profileData }) {
           className="w-full p-2 border rounded mb-4"
           value={avatarUrl}
           onChange={(e) => setAvatarUrl(e.target.value)}
+           placeholder="Enter your avatar image URL (optional)"
         />
 
         <label className="block mb-2" htmlFor="avatarAlt">
@@ -186,6 +183,7 @@ function Register({ profileData }) {
           className="w-full p-2 border rounded mb-4"
           value={avatarAlt}
           onChange={(e) => setAvatarAlt(e.target.value)}
+          placeholder="Describe your avatar image (optional)"
         />
 
         <label className="block mb-2" htmlFor="bannerUrl">
@@ -197,6 +195,7 @@ function Register({ profileData }) {
           className="w-full p-2 border rounded mb-4"
           value={bannerUrl}
           onChange={(e) => setBannerUrl(e.target.value)}
+          placeholder="Enter your banner image URL (optional)"
         />
 
         <label className="block mb-2" htmlFor="bannerAlt">
@@ -208,6 +207,7 @@ function Register({ profileData }) {
           className="w-full p-2 border rounded mb-4"
           value={bannerAlt}
           onChange={(e) => setBannerAlt(e.target.value)}
+          placeholder="Describe your banner image (optional)"
         />
 
         <label className="block mb-2" htmlFor="venueManager">
