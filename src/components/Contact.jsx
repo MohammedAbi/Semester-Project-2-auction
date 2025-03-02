@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
 function Contact() {
@@ -50,6 +51,13 @@ function Contact() {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
+      <Helmet>
+        <title>Contact | Auction House</title>
+        <meta
+          name="description"
+          content="Get in touch with the Auction House team for inquiries, support, or feedback."
+        />
+      </Helmet>
       <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
 
       <p className="mb-4 text-gray-700">

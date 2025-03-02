@@ -12,10 +12,10 @@ function LiveAuctions({ listings = [], updateListing }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
+    if (listings.length > 0) {
       setLoading(false);
-    }, 3000);
-  }, []);
+    }
+  }, [listings]);
 
   const openModal = (listing) => {
     setSelectedListing(listing);
@@ -31,7 +31,7 @@ function LiveAuctions({ listings = [], updateListing }) {
   // In ListingView and LiveAuctions
   const handleBidSubmit = async (bidAmount) => {
     try {
-      const user = getUser(); // Get the user object from localStorage
+      const user = getUser();
       const userName = user?.name;
       console.log("User name:", userName);
 
@@ -46,11 +46,11 @@ function LiveAuctions({ listings = [], updateListing }) {
         const newBid = { amount: bidAmount, bidder: { name: userName } };
         const updatedListing = {
           ...selectedListing,
-          bids: [...selectedListing.bids, newBid], // Add new bid to bids array
+          bids: [...selectedListing.bids, newBid],
         };
 
-        updateListing(selectedListing.id, updatedListing); // Ensure this updates state in parent
-        setSelectedListing(updatedListing); // Update local state immediately
+        updateListing(selectedListing.id, updatedListing);
+        setSelectedListing(updatedListing);
         closeModal();
       } else {
         console.log("Bid placement failed", response);
@@ -62,7 +62,7 @@ function LiveAuctions({ listings = [], updateListing }) {
 
   return (
     <section id="live-auctions" className="mb-12">
-      <h2 className="text-3xl font-bold mb-6">Live Auctions</h2>
+      <h1 className="text-3xl font-bold mb-6">Live Auctions</h1>
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
           <LoadingIndicator size="w-12 h-12" color="border-blue-700" />

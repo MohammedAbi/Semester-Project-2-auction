@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_AUTH, API_PROFILES } from "../../api/routes.mjs";
 import { fetchData } from "../../utils/fetchUtils.mjs";
-import { registerUser, updateProfile } from "../../api/auth.mjs";
 
 function Register({ profileData }) {
   const navigate = useNavigate();
@@ -91,9 +91,16 @@ function Register({ profileData }) {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">
+      <Helmet>
+        <title>Register | Auction House</title>
+        <meta
+          name="description"
+          content="Join Auction House to participate in auctions, manage your profile, and more!"
+        />
+      </Helmet>
+      <h1 className="text-2xl font-bold mb-4">
         {editing ? "Edit Profile" : "Register"}
-      </h2>
+      </h1>
       <form onSubmit={handleSubmit}>
         <label className="block mb-2" htmlFor="name">
           Name*
@@ -105,7 +112,7 @@ function Register({ profileData }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-             placeholder="Enter your name"
+          placeholder="Enter your name"
         />
 
         <label className="block mb-2" htmlFor="email">
@@ -146,7 +153,7 @@ function Register({ profileData }) {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-               placeholder="Confirm your password"
+              placeholder="Confirm your password"
             />
           </>
         )}
@@ -171,7 +178,7 @@ function Register({ profileData }) {
           className="w-full p-2 border rounded mb-4"
           value={avatarUrl}
           onChange={(e) => setAvatarUrl(e.target.value)}
-           placeholder="Enter your avatar image URL (optional)"
+          placeholder="Enter your avatar image URL (optional)"
         />
 
         <label className="block mb-2" htmlFor="avatarAlt">

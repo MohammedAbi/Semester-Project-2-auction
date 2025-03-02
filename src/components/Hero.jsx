@@ -1,3 +1,5 @@
+
+
 function Hero() {
   return (
     <section className="bg-blue-600 text-white py-20">

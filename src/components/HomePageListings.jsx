@@ -20,7 +20,7 @@ function HomePageListings({ listings, searchQuery }) {
 
   return (
     <section id="listings" className="mb-12">
-      <h2 className="text-3xl font-bold mb-6">Featured Listings</h2>
+      <h1 className="text-3xl font-bold mb-6">Featured Listings</h1>
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
           <LoadingIndicator size="w-12 h-12" color="border-blue-700" />
@@ -52,6 +52,8 @@ function HomePageListings({ listings, searchQuery }) {
                   <h3 className="text-xl font-semibold text-gray-800">
                     {listing.title}
                   </h3>
+
+                  {/* Tags Section */}
                   <div className="flex flex-wrap gap-2 mt-4 mb-4">
                     {listing.tags.map((tag, tagIndex) => (
                       <span
@@ -62,7 +64,10 @@ function HomePageListings({ listings, searchQuery }) {
                       </span>
                     ))}
                   </div>
+
                   <p className="text-gray-600 mt-2">{listing.description}</p>
+
+                  {/* Seller Information */}
                   <div className="flex items-center justify-start space-x-4 mt-2 bg-white">
                     <img
                       src={
@@ -76,9 +81,25 @@ function HomePageListings({ listings, searchQuery }) {
                       Seller: {listing.seller?.name}
                     </p>
                   </div>
-                  <p className="text-gray-700 font-bold mt-3">
-                    Latest Bid: ${latestBid} by {latestBidderName}
-                  </p>
+
+                  {/* Bid Information */}
+                  {listing?.bids?.length > 0 ? (
+                    (() => {
+                      const latestBid =
+                        listing.bids[listing.bids.length - 1].amount;
+                      const latestBidderName =
+                        listing.bids[listing.bids.length - 1].bidder.name;
+                      return (
+                        <p className="text-gray-700 font-bold mt-3">
+                          Latest Bid: ${latestBid} by {latestBidderName}
+                        </p>
+                      );
+                    })()
+                  ) : (
+                    <p className="text-gray-600 mt-2">No bids yet</p>
+                  )}
+
+                  {/* Auction Metadata */}
                   <p className="text-gray-700 font-medium mt-3">
                     Created At: {new Date(listing.created).toLocaleString()}
                   </p>
@@ -89,6 +110,7 @@ function HomePageListings({ listings, searchQuery }) {
                     Auction Ends: {new Date(listing.endsAt).toLocaleString()}
                   </p>
 
+                  {/* View Listing Button */}
                   <div className="mt-5">
                     <button
                       onClick={() => navigate(`/listing/${listing.id}`)}
@@ -108,5 +130,3 @@ function HomePageListings({ listings, searchQuery }) {
 }
 
 export default HomePageListings;
-
-

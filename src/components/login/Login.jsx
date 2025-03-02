@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchData } from "../../utils/fetchUtils.mjs";
 import { API_AUTH } from "../../api/routes.mjs";
@@ -18,7 +19,12 @@ function Login() {
 
     try {
       const body = { email, password };
-      const response = await fetchData(API_AUTH.LOGIN, "POST", [null, null], body);
+      const response = await fetchData(
+        API_AUTH.LOGIN,
+        "POST",
+        [null, null],
+        body
+      );
 
       console.log("API Response:", response);
 
@@ -43,7 +49,14 @@ function Login() {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
+      <Helmet>
+        <title>Login | Auction House</title>
+        <meta
+          name="description"
+          content="Log in to Auction House to bid on items and manage your account."
+        />
+      </Helmet>
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
       <form onSubmit={handleSubmit}>
         <label className="block mb-2" htmlFor="email">
           Email*

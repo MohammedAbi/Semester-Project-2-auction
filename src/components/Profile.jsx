@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import ProfilePageListings from "./ProfilePageListings";
 import { API_PROFILES } from "../api/routes.mjs";
@@ -68,6 +69,13 @@ function Profile() {
 
   return (
     <div className="bg-gray-100 min-h-screen">
+       <Helmet>
+        <title>Profile | Auction House</title>
+        <meta
+          name="description"
+          content="Manage your Auction House profile, update your details, and view your auction history."
+        />
+      </Helmet>
       <ProfilePageListings profileData={profileData} />
     </div>
   );

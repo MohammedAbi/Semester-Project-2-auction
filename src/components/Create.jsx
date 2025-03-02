@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchData } from "../utils/fetchUtils.mjs";
 import { API_LISTINGS } from "../api/routes.mjs";
@@ -61,38 +62,6 @@ function Create({ profileData, listings = [] }) {
     }
   }, [id, existingListing, isEditing]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   const requestBody = {
-  //     title,
-  //     description,
-  //     tags: tags.split(",").map((tag) => tag.trim()),
-  //     media: mediaUrl ? [{ url: mediaUrl, alt: mediaAlt }] : [],
-  //     endsAt: new Date(endsAt).toISOString(),
-  //   };
-
-  //   try {
-  //     const endpoint = isEditing
-  //       ? `${API_LISTINGS.UPDATE}/${id}`
-  //       : API_LISTINGS.CREATE;
-  //     const method = isEditing ? "PUT" : "POST";
-
-  //     const response = await fetchData(
-  //       endpoint,
-  //       method,
-  //       ["auth", "api-key"],
-  //       requestBody
-  //     );
-  //     console.log("Listing saved:", response);
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error("Failed to save listing:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -129,6 +98,13 @@ function Create({ profileData, listings = [] }) {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
+      <Helmet>
+        <title>Home | Auction House</title>
+        <meta
+          name="description"
+          content="Discover a wide range of items up for bid at Auction House. Sign up today to start bidding!"
+        />
+      </Helmet>
       <h2 className="text-2xl font-bold mb-4">
         {isEditing ? "Edit Listing" : "Create New Listing"}
       </h2>

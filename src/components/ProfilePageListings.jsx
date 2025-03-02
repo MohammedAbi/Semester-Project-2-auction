@@ -7,10 +7,11 @@ function ProfilePageListings({ profileData }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    // Set loading to false when profileData is available
+    if (profileData) {
       setLoading(false);
-    }, 3000);
-  }, []);
+    }
+  }, [profileData]);
 
   const {
     name,
