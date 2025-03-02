@@ -69,7 +69,7 @@ function Profile() {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-       <Helmet>
+      <Helmet>
         <title>Profile | Auction House</title>
         <meta
           name="description"

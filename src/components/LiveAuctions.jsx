@@ -33,21 +33,21 @@ function LiveAuctions({ listings = [], updateListing }) {
     try {
       const user = getUser();
       const userName = user?.name;
-  
+
       const response = await fetchData(
         API_LISTINGS.BID(selectedListing.id),
         "POST",
         ["api-key", "auth"],
         { amount: bidAmount }
       );
-  
+
       if (response.success) {
         // After successful bid, refetch the listing
         const updatedListingResponse = await fetchData(
           API_LISTINGS.SINGLE(selectedListing.id),
           "GET"
         );
-  
+
         updateListing(selectedListing.id, updatedListingResponse.data);
         setSelectedListing(updatedListingResponse.data);
         closeModal();
@@ -58,7 +58,6 @@ function LiveAuctions({ listings = [], updateListing }) {
       console.error("Error placing bid:", error);
     }
   };
-  
 
   return (
     <section id="live-auctions" className="mb-12">
