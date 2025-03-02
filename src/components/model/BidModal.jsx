@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import ValidateBid from "../validation/ValidateBid"; // Your validation logic
 import LoadingIndicator from "../LoadingIndicator"; // Loading spinner component
 import { getUser } from "../../utils/localStorageUtils.mjs";
+import { useNavigate } from "react-router-dom";
 
 function BidModal({ listing, onClose, onSubmit, updateListing }) {
   const [bidAmount, setBidAmount] = useState(""); // State to store bid input
   const [error, setError] = useState(""); // State to store error message
   const [loading, setLoading] = useState(false); // State to manage loading state
+  const [userError, setUserError] = useState(""); // State to store user login error
+  const navigate = useNavigate();
 
   // Handle input change for the bid amount
   const handleBidChange = (e) => {
@@ -16,6 +19,16 @@ function BidModal({ listing, onClose, onSubmit, updateListing }) {
 
   // Handle form submission for placing a bid
   const handleSubmit = async () => {
+    const user = getUser(); // Get the user object from localStorage
+    if (!user) {
+      setUserError(
+        "You must be logged in to place a bid. Redirecting to login page..."
+      );
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page after 3 seconds
+      }, 3000);
+      return; // Exit if user is not logged in
+    }
     // Get the latest bid if there are any
     const latestBid =
       listing?.bids?.length > 0
@@ -83,6 +96,10 @@ function BidModal({ listing, onClose, onSubmit, updateListing }) {
           }
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        {userError && (
+          <p className="text-red-500 text-sm mt-1">{userError}</p>
+        )}{" "}
+        {/* Display login error */}
         <div className="flex justify-end mt-4">
           <button
             onClick={onClose}
