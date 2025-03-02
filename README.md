@@ -134,3 +134,4 @@ VITE_API_KEY=your-api-key
 - **Prototype (Desktop)**: [View on Figma](<https://www.figma.com/proto/R0URBxhEJp5wTglXpvMhoZ/Aution-House---Official-Tailwind-CSS-Styles-(Community)?node-id=3404-752&t=flKtHp2wXhfjaUAv-1>)
 - **GitHub Project Board**: [View GitHub Project](https://github.com/users/MohammedAbi/projects/8)
 - **GitHub Repository**: [View Repo](https://github.com/MohammedAbi/Semester-Project-2-auction/tree/main)
+- **Hosted On netlify:**: [View Live website](https://semester-project-2-auction.netlify.app/)
