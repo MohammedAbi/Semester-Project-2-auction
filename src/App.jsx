@@ -104,6 +104,7 @@ function App() {
     fetchAuctions();
   }, [auctionsPage]);
 
+  // ff
   return (
     <HelmetProvider>
       <BrowserRouter>
