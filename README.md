@@ -128,6 +128,22 @@ Create a .env file in the root of your project:
 VITE_API_KEY=your-api-key
 ```
 
+## Test User
+
+For testing purposes, you can use the following credentials for email and password:
+
+Email:
+
+```bash
+student27006@stud.noroff.no
+```
+
+Password:
+
+```bash
+student27006
+```
+
 ## Links
 
 - **Prototype (Mobile)**: [View on Figma](<https://www.figma.com/proto/R0URBxhEJp5wTglXpvMhoZ/Aution-House---Official-Tailwind-CSS-Styles-(Community)?node-id=3224-47&t=flKtHp2wXhfjaUAv-1>)
