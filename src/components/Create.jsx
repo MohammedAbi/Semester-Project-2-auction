@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchData } from "../utils/fetchUtils.mjs";
 import { API_LISTINGS } from "../api/routes.mjs";
+import { getUser } from "../utils/localStorageUtils.mjs";
 
 function Create({ profileData, listings = [] }) {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Create({ profileData, listings = [] }) {
   // Determine source of listings
   const sourceListings = profileData ? profileData.listings : listings;
   const existingListing = sourceListings.find((listing) => listing.id === id);
+  const [user, setUser] = useState(null);
 
   // State
   const [title, setTitle] = useState("");
@@ -21,6 +23,7 @@ function Create({ profileData, listings = [] }) {
   const [mediaAlt, setMediaAlt] = useState("");
   const [endsAt, setEndsAt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userError, setUserError] = useState("");
 
   // Fetch listing if editing but not found in local data
   useEffect(() => {
@@ -96,6 +99,24 @@ function Create({ profileData, listings = [] }) {
     }
   };
 
+  useEffect(() => {
+    const loggedInUser = getUser(); // Get user from local storage
+
+    if (!loggedInUser) {
+      setUserError(
+        "You must be logged in. Redirecting to login in 3 seconds..."
+      );
+
+      const timeout = setTimeout(() => {
+        navigate("/login"); 
+      }, 3000);
+
+      return () => clearTimeout(timeout); 
+    } else {
+      setUser(loggedInUser);
+    }
+  }, [navigate]);
+
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
       <Helmet>
@@ -112,6 +133,13 @@ function Create({ profileData, listings = [] }) {
         {isEditing ? "Edit Listing" : "Create New Listing"}
       </h2>
       <form onSubmit={handleSubmit}>
+        {/* Display user error inside the form */}
+        {userError && (
+          <p className="text-center text-red-600 font-semibold mb-4">
+            {userError}
+          </p>
+        )}
+
         <label className="block mb-2" htmlFor="title">
           Title*
         </label>
