@@ -107,6 +107,27 @@ export const API_LISTINGS = {
 }
 ```
 
+Profiles Endpoints
+
+```bash
+export const API_PROFILES = {
+  BASE: `${API_BASE_URL}/auction/profiles`,
+  SINGLE: (name) => `${API_BASE_URL}/auction/profiles/${name}`,
+  UPDATE: (name) => `${API_BASE_URL}/auction/profiles/${name}`,
+  LISTINGS: (name) => `${API_BASE_URL}/auction/profiles/${name}/listings`,
+  BIDS: (name) => `${API_BASE_URL}/auction/profiles/${name}/bids`,
+  WINS: (name) => `${API_BASE_URL}/auction/profiles/${name}/wins`,
+  SEARCH: (query) => `${API_BASE_URL}/auction/profiles/search?q=${query}`,
+}
+```
+
+API Key
+Create a .env file in the root of your project:
+
+```bash
+VITE_API_KEY=your-api-key
+```
+
 ## Links
 
 - **Prototype (Mobile)**: [View on Figma](<https://www.figma.com/proto/R0URBxhEJp5wTglXpvMhoZ/Aution-House---Official-Tailwind-CSS-Styles-(Community)?node-id=3224-47&t=flKtHp2wXhfjaUAv-1>)
