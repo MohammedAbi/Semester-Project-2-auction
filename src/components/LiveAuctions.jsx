@@ -33,24 +33,23 @@ function LiveAuctions({ listings = [], updateListing }) {
     try {
       const user = getUser();
       const userName = user?.name;
-      console.log("User name:", userName);
-
+  
       const response = await fetchData(
         API_LISTINGS.BID(selectedListing.id),
         "POST",
         ["api-key", "auth"],
         { amount: bidAmount }
       );
-
+  
       if (response.success) {
-        const newBid = { amount: bidAmount, bidder: { name: userName } };
-        const updatedListing = {
-          ...selectedListing,
-          bids: [...selectedListing.bids, newBid],
-        };
-
-        updateListing(selectedListing.id, updatedListing);
-        setSelectedListing(updatedListing);
+        // After successful bid, refetch the listing
+        const updatedListingResponse = await fetchData(
+          API_LISTINGS.SINGLE(selectedListing.id),
+          "GET"
+        );
+  
+        updateListing(selectedListing.id, updatedListingResponse.data);
+        setSelectedListing(updatedListingResponse.data);
         closeModal();
       } else {
         console.log("Bid placement failed", response);
@@ -59,6 +58,7 @@ function LiveAuctions({ listings = [], updateListing }) {
       console.error("Error placing bid:", error);
     }
   };
+  
 
   return (
     <section id="live-auctions" className="mb-12">
@@ -68,7 +68,7 @@ function LiveAuctions({ listings = [], updateListing }) {
           <LoadingIndicator size="w-12 h-12" color="border-blue-700" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-center">
           {listings.map((listing) => (
             <div
               key={listing.id}

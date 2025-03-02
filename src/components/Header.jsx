@@ -1,46 +1,33 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getToken, setLocaStorage } from "../utils/localStorageUtils.mjs";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // for redirecting after logout
 
-function Header() {
+function Header({ token, user, setToken, setUser }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [token, setToken] = useState(getToken()); // Initial token state
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user"))); 
+  const navigate = useNavigate();
 
-  // Update token and user on localStorage change or initial load
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setToken(getToken()); // Update token
-      setUser(JSON.parse(localStorage.getItem("user"))); // Update user
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    // Ensure token and user values are synchronized with localStorage on first load
-    setToken(getToken());
-    setUser(JSON.parse(localStorage.getItem("user")));
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []); // Empty dependency array means this runs once when the component mounts
-
+  // Toggle mobile menu visibility
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Toggle profile menu visibility
   const toggleProfileMenu = () => {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   };
 
-  const handleLogout = () => {
+  // Logout function
+  const logout = () => {
+    // Clear token and user data from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setLocaStorage("token", null); // Ensure token is null
-    setLocaStorage("user", null); // Ensure user is null
-    setToken(null); // Reset token state
-    setUser(null); // Reset user state
+
+    // Update state to reflect logout
+    setToken(null);
+    setUser(null);
+
+    // Redirect to home or login page after logging out
+    navigate("/");
   };
 
   return (
@@ -48,54 +35,37 @@ function Header() {
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-start">
-            <Link to="/" className="text-2xl font-bold text-white">
+            <a href="/" className="text-2xl font-bold text-white">
               Auction House
-            </Link>
+            </a>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/create"
+            <a
+              href="/create"
               className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Create
-            </Link>
-            {token ? (
+            </a>
+            {!token ? (
               <>
-                <button
-                  onClick={handleLogout}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
+                <a
+                  href="/login"
                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   Login
-                </Link>
-                <Link
-                  to="/register"
+                </a>
+                <a
+                  href="/register"
                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   Register
-                </Link>
+                </a>
               </>
-            )}
-            <Link
-              to="/contact"
-              className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >
-              Contact
-            </Link>
-
-            {/* Profile Icon for Desktop */}
-            <div className="relative">
-              {token && (
+            ) : (
+              // Show Profile and Logout if user is logged in
+              <div className="relative">
                 <button
                   onClick={toggleProfileMenu}
                   className="text-gray-300 hover:text-white focus:outline-none"
@@ -116,19 +86,32 @@ function Header() {
                     />
                   </svg>
                 </button>
-              )}
-              {/* Profile Dropdown Menu */}
-              {isProfileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-10">
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >
-                    Profile settings
-                  </Link>
-                </div>
-              )}
-            </div>
+
+                {/* Profile Dropdown Menu */}
+                {isProfileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-10">
+                    <a
+                      href="/profile"
+                      className="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    >
+                      Profile settings
+                    </a>
+                    <button
+                      onClick={logout}
+                      className="block w-full text-left px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+            <a
+              href="/contact"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            >
+              Contact
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -159,49 +142,49 @@ function Header() {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-800 text-white p-4 space-y-4">
-            <Link
-              to="/create"
+            <a
+              href="/create"
               className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Create
-            </Link>
-            {token ? (
+            </a>
+            {!token ? (
               <>
-                <button
-                  onClick={handleLogout}
-                  className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                >
-                  Logout
-                </button>
-                <Link
-                  to="/profile"
-                  className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                >
-                  Profile
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
+                <a
+                  href="/login"
                   className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   Login
-                </Link>
-                <Link
-                  to="/register"
+                </a>
+                <a
+                  href="/register"
                   className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   Register
-                </Link>
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/profile"
+                  className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                >
+                  Profile
+                </a>
+                <button
+                  onClick={logout}
+                  className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white w-full text-left"
+                >
+                  Logout
+                </button>
               </>
             )}
-            <Link
-              to="/contact"
+            <a
+              href="/contact"
               className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Contact
-            </Link>
+            </a>
           </div>
         )}
       </div>

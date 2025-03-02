@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
@@ -28,7 +28,6 @@ function Home({
           content="Welcome to Auction House – your destination for exciting auctions and bidding opportunities."
         />
       </Helmet>
-      <Header />
       <Hero />
       <main className="container mx-auto p-4">
         <SearchBar setSearchQuery={setSearchQuery} />

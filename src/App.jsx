@@ -12,6 +12,7 @@ import Register from "./components/register/Register";
 import { fetchData } from "./utils/fetchUtils.mjs";
 import { API_LISTINGS } from "./api/routes.mjs";
 import Profile from "./components/Profile";
+import { getToken, getUser } from "./utils/localStorageUtils.mjs";
 
 function App() {
   const [listings, setListings] = useState([]);
@@ -23,6 +24,23 @@ function App() {
   const [auctionsPage, setAuctionsPage] = useState(1);
   const [hasMoreAuctions, setHasMoreAuctions] = useState(true);
   const [loadingAuctions, setLoadingAuctions] = useState(false);
+
+  const [token, setToken] = useState(getToken());
+  const [user, setUser] = useState(getUser());
+
+  // Update token and user on localStorage change or initial load
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(getToken());
+      setUser(getUser());
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const updateListing = (id, updatedListing) => {
     setListings((prevListings) =>
@@ -63,16 +81,18 @@ function App() {
       setLoadingAuctions(true);
       try {
         const data = await fetchData(
-          API_LISTINGS.BASE(true, true) +
-            `&_active=true&limit=9&page=${auctionsPage}`,
+          `${API_LISTINGS.BASE(true, true)}&_active=true&limit=9&page=${auctionsPage}`,
           "GET"
         );
+
+        // Only add new auctions that are not already in the state
         setAuctions((prev) => {
           const newItems = data.data.filter(
             (item) => !prev.some((prevItem) => prevItem.id === item.id)
           );
           return [...prev, ...newItems];
         });
+
         setHasMoreAuctions(data.data.length === 9);
       } catch (error) {
         console.error("Error fetching auctions:", error);
@@ -88,7 +108,12 @@ function App() {
     <HelmetProvider>
       <BrowserRouter>
         <div className="flex flex-col min-h-screen bg-gray-100 pt-16">
-          <Header />
+          <Header
+            token={token}
+            user={user}
+            setToken={setToken}
+            setUser={setUser}
+          />
           <main className="flex-grow container mx-auto p-4">
             <Routes>
               <Route
@@ -104,6 +129,10 @@ function App() {
                     hasMoreAuctions={hasMoreAuctions}
                     loadingListings={loadingListings}
                     loadingAuctions={loadingAuctions}
+                    token={token}
+                    user={user}
+                    setToken={setToken}
+                    setUser={setUser}
                   />
                 }
               />
@@ -116,7 +145,17 @@ function App() {
                   />
                 }
               />
-              <Route path="/create" element={<Create />} />
+              <Route
+                path="/create"
+                element={
+                  <Create
+                    token={token}
+                    user={user}
+                    setToken={setToken}
+                    setUser={setUser}
+                  />
+                }
+              />
               <Route path="/edit/:id" element={<Create />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

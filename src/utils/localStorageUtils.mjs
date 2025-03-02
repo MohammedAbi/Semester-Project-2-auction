@@ -1,7 +1,12 @@
 // Function to set localStorage
 export const setLocaStorage = (key, value) => {
-  localStorage.setItem(key, value);
+  if (value === null || value === undefined) {
+    localStorage.removeItem(key);
+  } else {
+    localStorage.setItem(key, value);
+  }
 };
+
 
 // Function to get the token from localStorage
 export const getToken = () => {
