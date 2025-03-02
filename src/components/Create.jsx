@@ -99,12 +99,15 @@ function Create({ profileData, listings = [] }) {
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
       <Helmet>
-        <title>Home | Auction House</title>
+        <title>
+          {isEditing ? "Edit Listing" : "Create Listing"} | Auction House
+        </title>
         <meta
           name="description"
-          content="Discover a wide range of items up for bid at Auction House. Sign up today to start bidding!"
+          content="Create a new auction listing or edit an existing one at Auction House. Set your price and start bidding today!"
         />
       </Helmet>
+
       <h2 className="text-2xl font-bold mb-4">
         {isEditing ? "Edit Listing" : "Create New Listing"}
       </h2>
