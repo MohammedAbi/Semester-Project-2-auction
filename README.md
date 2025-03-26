@@ -26,6 +26,20 @@ This project is a front-end application for an auction website where users can l
 - PostCSS (CSS processing)
 - React Router DOM (for routing)
 
+## Feedback & Grading
+
+### Grade: **B**
+
+### Teacher's Feedback:
+Dear Mohammed,
+
+I acknowledge your Semester Project 2 work. Getting through this assignment shows real dedication.
+
+Brilliant achievement in your Semester Project 2 assignment! Your work satisfied most criteria flawlessly. Keep up this standard!
+
+#### Areas for Improvement:
+- Missing JSDoc Documentation
+
 ## Folder Structure
 
 The project follows a component-based architecture in React. The folder structure is organized as follows:
